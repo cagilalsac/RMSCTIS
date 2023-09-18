@@ -13,9 +13,26 @@ namespace MVC.Controllers
             _logger = logger;
         }
 
+        /*
+        IActionResult
+        |
+        implements IActionResult
+        ActionResult
+        |
+        inherits from ActionResult
+        ViewResult
+        */
+        // Way 1:
+        //public ViewResult Index()
+        // Way 2:
+        //public ActionResult Index()
+        // Way 3:
         public IActionResult Index()
         {
-            return View();
+            // Way 1:
+            //return new ViewResult();
+            // Way 2:
+            return View(); // returns an object of type ViewResult
         }
 
         public IActionResult Privacy()
