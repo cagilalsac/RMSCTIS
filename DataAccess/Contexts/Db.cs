@@ -29,4 +29,14 @@ public class Db : DbContext // Db is-an Entity Framework DbContext which will ad
     public Db(DbContextOptions options) : base(options)
     {
     }
+	
+    // We need to override the OnModelCreating virtual method in the base (DbContext) class to
+    // configure many to many relationships. We can also configure about anything related
+    // to the database structure under this method, but for easier development we configured
+    // some in the entities using data annotations. This way is not recommended by SOLID Principles.
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // new { e.UserId, e.ResourceId }: anonymous type used for using more then one property with the delegate
+        modelBuilder.Entity<UserResource>().HasKey(e =>  new { e.UserId, e.ResourceId }); 
+    }
 }

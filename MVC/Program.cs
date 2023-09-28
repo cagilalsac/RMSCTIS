@@ -23,7 +23,7 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
                                                      // therefore we should provide the type of our class
                                                      // inherited from the DbContext as the generic type
                                                      // for AddDbContext method.
-    .UseMySQL("server=127.0.0.1;database=RMSDB;user id=std;password=;"));
+    .UseMySQL("server=127.0.0.1;database=test;user id=std;password=;"));
 #endregion
 
 builder.Services.AddControllersWithViews();

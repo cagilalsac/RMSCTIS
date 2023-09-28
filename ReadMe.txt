@@ -37,12 +37,12 @@ Roadmap:
 
 1) In the DataAccess layer, entities are created.
 
-2) In the DataAccess layer, MySql.EntityFrameworkCore and Microsoft.EntityFrameworkCore.Tools
-packages are downloaded through NuGet. The .NET version you are using determines which packages 
-with that version number should be downloaded from NuGet. For example, if you are using .NET 7, 
-you should look for packages compatible with .NET 7 and install their latest versions. 
-The version number typically corresponds to the major version of .NET, so in this case, 
-you should search for packages starting with version 7.x.x.
+2) In the DataAccess layer, MySql.EntityFrameworkCore, Microsoft.EntityFrameworkCore.Tools
+and Microsoft.EntityFrameworkCore.SqlServer packages are downloaded through NuGet. 
+The .NET version you are using determines which packages with that version number should be 
+downloaded from NuGet. For example, if you are using .NET 7, you should look for packages compatible 
+with .NET 7 and install their latest versions. The version number typically corresponds to the major 
+version of .NET, so in this case, you should search for packages starting with version 7.x.x.
 
 3) In the DataAccess layer, a context class derived from the DbContext class is created
 including the DbSets of type entites of our project. Then a parameterized constructor is created 
@@ -50,14 +50,24 @@ which will accept an object of type DbContextOptions containing the connection s
 Afterward, in the MVC layer, dependency injection for the class derived from the DbContext 
 is configured in the IoC (Inversion of Control) Container in the Program.cs file.
 
-4) In the MVC layer, Microsoft.EntityFrameworkCore.Design and Microsoft.VisualStudio.Web.CodeGeneration.Design 
-packages are downloaded through NuGet.
+4) In the MVC layer, Microsoft.EntityFrameworkCore.Design package is downloaded through NuGet.
 If you are using Visual Studio instead of Visual Studio Code, you should set the MVC project 
 as the start up project.
 
 5) For Entity Framework Code First migration terminal commands:
-5.1) First "dotnet tool install --global dotnet-ef" command should be run only once.
-5.2) Then a new database migration (version) can be added with "dotnet-ef migrations add v1" 
+5.1) First "dotnet tool install --global dotnet-ef" command should be run.
+5.2) Then you need to change directory to the DataAccess folder entering "cd dataaccess".
+A new database migration (version) can be added with "dotnet-ef --startup-project ../MVC/ migrations add v1" 
 command, v1 can be any unique name which hasn't been used before.
-5.3) Then the database migration is applied to the database by running
-"dotnet-ef database update" command.
+5.3) Then the database migration is applied to the database by running 
+"dotnet-ef --startup-project ../MVC/ database update" command.
+
+6) For scaffolding:
+6.1) In the MVC layer, Microsoft.VisualStudio.Web.CodeGeneration.Design package is downloaded.
+6.2) In the DataAccess layer, a class called DbFactory should be created and only connection string of the database 
+should be modified in the CreateDbContext method. This class will be used for scaffolding operations (recommended to use).
+6.3) "dotnet tool install -g dotnet-aspnet-codegenerator" command should be run in the terminal.
+6.4) Change directory to MVC by "cd mvc" terminal command, then for creating the Users controller, its actions and views: 
+"dotnet aspnet-codegenerator controller -name UsersController --relativeFolderPath Controllers --useDefaultLayout --dataContext Db --model User"
+command should be run in the terminal. Now you can see UsersController under the Controllers folder and Users view folder under the Views folder
+of the MVC project.
