@@ -64,10 +64,27 @@ command, v1 can be any unique name which hasn't been used before.
 
 6) For scaffolding:
 6.1) In the MVC layer, Microsoft.VisualStudio.Web.CodeGeneration.Design package is downloaded.
-6.2) In the DataAccess layer, a class called DbFactory should be created and only connection string of the database 
+6.2) The Templates folder under the MVC project folder should be copied to your MVC Web Application project folder.
+6.3) In the DataAccess layer, a class called DbFactory should be created and only connection string of the database 
 should be modified in the CreateDbContext method. This class will be used for scaffolding operations (recommended to use).
-6.3) "dotnet tool install -g dotnet-aspnet-codegenerator" command should be run in the terminal.
-6.4) Change directory to MVC by "cd mvc" terminal command, then for creating the Users controller, its actions and views: 
+6.4) "dotnet tool install -g dotnet-aspnet-codegenerator" command should be run in the terminal.
+6.5) Change directory to MVC by "cd mvc" terminal command, then for creating the Users controller, its actions and views: 
 "dotnet aspnet-codegenerator controller -name UsersController --relativeFolderPath Controllers --useDefaultLayout --dataContext Db --model User"
 command should be run in the terminal. Now you can see UsersController under the Controllers folder and Users view folder under the Views folder
 of the MVC project.
+
+7.1) In the Business layer, Services folder is created and under this folder service classes with their interfaces 
+for CRUD and other operations are created. Since this is a small project, the interfaces and classes of the
+services will be in the same file but generally a Bases folder is created under the Services folder and
+abstract classes or interfaces are created in the Base folder and concrete classes which inherit the abstract
+classes or implement the interfaces are created in the Services folder.
+Services are used for conversion of database table raw data from entities to the models and like versa 
+which will be used for user interaction in the MVC project.
+
+The data flow from the user to the database or from database to the user can be shown as below:
+View <-> Controller (Action) <-> Service (Model) <-> DbContext (Entity) <-> Database
+
+7.2) In the Business layer, Models folder is created and under this folder models for entities are created
+firstly by copying the primitive type properties (not reference type) to the model class 
+(or this can be defined as copying the properties which have columns in the entity related table from 
+entity class to the model class).

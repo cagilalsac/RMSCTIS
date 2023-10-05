@@ -1,55 +1,55 @@
 #nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Business;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DataAccess.Contexts;
-using DataAccess.Entities;
 
+//Generated from Custom Template.
 namespace MVC.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly Db _context;
+        // Add service injections here
+        #region User Service Constructor Injection
+        private readonly IUserService _userService;
 
-        public UsersController(Db context)
+        // An object of type UserService which is implemented from the IUserService
+        // interface is injected to this class through the constructor therefore
+        // user CRUD and other operations can be performed with this object.
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
+        #endregion
 
         // GET: Users
-        public IActionResult Index()
+        public IActionResult List()
         {
-            var db = _context.Users.Include(u => u.Role);
-            return View(db.ToList());
+            // A query is executed and the result is stored in the collection
+            // when ToList method is called.
+            List<UserModel> userList = _userService.Query().ToList();
+
+            // Way 1: 
+            //return View(userList); // model will be passed to the List view under Views/Users folder
+            // Way 2:
+            return View("Index", userList); // model will be passed to the Index view under Views/Users folder
         }
 
         // GET: Users/Details/5
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _context.Users
-                .Include(u => u.Role)
-                .SingleOrDefault(m => m.Id == id);
+            UserModel user = null; // TODO: Add get item service logic here
             if (user == null)
             {
                 return NotFound();
             }
-
             return View(user);
         }
 
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id");
+            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            ViewData["RoleId"] = new SelectList(null, "Id", "Id");
             return View();
         }
 
@@ -58,32 +58,28 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(User user)
+        public IActionResult Create(UserModel user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                _context.SaveChanges();
+                // TODO: Add insert service logic here
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", user.RoleId);
+            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            ViewData["RoleId"] = new SelectList(null, "Id", "Id", user.RoleId);
             return View(user);
         }
 
         // GET: Users/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _context.Users.Find(id);
+            UserModel user = null; // TODO: Add get item service logic here
             if (user == null)
             {
                 return NotFound();
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", user.RoleId);
+            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            ViewData["RoleId"] = new SelectList(null, "Id", "Id", user.RoleId);
             return View(user);
         }
 
@@ -92,34 +88,26 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(User user)
+        public IActionResult Edit(UserModel user)
         {
             if (ModelState.IsValid)
             {
-                _context.Update(user);
-                _context.SaveChanges();
+                // TODO: Add update service logic here
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", user.RoleId);
+            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            ViewData["RoleId"] = new SelectList(null, "Id", "Id", user.RoleId);
             return View(user);
         }
 
         // GET: Users/Delete/5
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _context.Users
-                .Include(u => u.Role)
-                .SingleOrDefault(m => m.Id == id);
+            UserModel user = null; // TODO: Add get item service logic here
             if (user == null)
             {
                 return NotFound();
             }
-
             return View(user);
         }
 
@@ -128,9 +116,7 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var user = _context.Users.Find(id);
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            // TODO: Add delete service logic here
             return RedirectToAction(nameof(Index));
         }
 	}
