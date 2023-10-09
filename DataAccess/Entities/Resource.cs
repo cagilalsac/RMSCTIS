@@ -1,6 +1,7 @@
-﻿#nullable disable // For preventing the usage of ? (nullable) for reference types
-                  // such as strings, arrays, classes, interfaces, etc.
-                  // Should only be used with entity and model classes.
+﻿#nullable disable 
+// For preventing the usage of ? (nullable) for reference types
+// such as strings, arrays, classes, interfaces, etc.
+// Should only be used with entity and model classes.
 
 namespace DataAccess.Entities; // namespace is used for grouping the classes according the their similar purposes,
                                // similar to package usage in Java

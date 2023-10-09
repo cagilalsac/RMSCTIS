@@ -84,7 +84,24 @@ which will be used for user interaction in the MVC project.
 The data flow from the user to the database or from database to the user can be shown as below:
 View <-> Controller (Action) <-> Service (Model) <-> DbContext (Entity) <-> Database
 
-7.2) In the Business layer, Models folder is created and under this folder models for entities are created
+7.2) In the MVC layer, in the Program.cs file, the created service inversion of control must be added
+into the IoC Container.
+
+7.3) In the Business layer, Models folder is created and under this folder models for entities are created
 firstly by copying the primitive type properties (not reference type) to the model class 
 (or this can be defined as copying the properties which have columns in the entity related table from 
 entity class to the model class).
+
+7.4) Within the model classes, DisplayName data annotations (attributes) must be defined above the properties
+which will be used in the related views.
+
+8) In the MVC layer, the views should be edited according to the view's model such that the model properties 
+for user interaction should be used.
+
+9) The default MVC route is: controller/action/id? (? means optional), for example a request to the
+Users controller's List action can be sent by writing https://localhost:7275/Users/List in the address
+of a browser or creating a link in a view using the HTML anchor tag such that <a href="/Users/List">User List</a>.
+Instead of HTML, HTML Helpers or Tag Helpers should be used.
+For example, another request to the Users controller's Details action can be sent by writing
+https://localhost:7275/Users/Details/6 in the address of a browser or creating a link in a view using the 
+HTML anchor tag such that <a href="/Users/Details/6">Details</a>.

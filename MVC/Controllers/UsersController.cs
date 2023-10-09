@@ -21,7 +21,7 @@ namespace MVC.Controllers
         }
         #endregion
 
-        // GET: Users
+        // GET: Users/List
         public IActionResult List()
         {
             // A query is executed and the result is stored in the collection

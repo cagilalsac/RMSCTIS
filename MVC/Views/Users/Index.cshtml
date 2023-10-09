@@ -4,7 +4,10 @@
 
 @* This is a Razor comment. *@
 
-@model IEnumerable<UserModel>
+@* Model of the view type declaration: *@
+@* @model IEnumerable<Business.UserModel> *@
+@model IEnumerable<UserModel> 
+    
 @*Generated from Custom Template.*@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 @* 
@@ -13,18 +16,32 @@
 *@
 
 @{
-    ViewData["Title"] = "Index"; @* ViewData is used for carrying data between views and from actions to views. *@
+    string title = "User List";
+    ViewData["Title"] = title; @* ViewData is used for carrying data between views and from actions to views. *@
+
+    int count = Model.Count(); @* Count method returns the element count of an IEnumerable collection. *@
 }
 
-<h1>@ViewData["Title"]</h1> @* The string value set above will be written in the h1 tag. *@
+<h1>@title</h1> @* The string value set above will be written in the h1 tag. *@
 
 <p>
+    @* HTML: *@
+    @* <a href="/Users/Create">Create New</a> *@
+    @* Tag Helper Way 1: *@
+    @* <a asp-action="Create" asp-controller="Users">Create New</a> *@
+    @* Tag Helper Way 2: no need to write controller because we are under the Views/Users folder with the Create view. *@
     <a asp-action="Create">Create New</a>
 </p>
+
+@* todo: write count *@
+
 <table class="table">
     <thead>
         <tr>
             <th>
+                @* HTML: *@
+                @* User Name *@
+                @* HTML Helper: uses the DisplayName attribute of the UserName property in the UserModel class. *@
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
@@ -37,7 +54,7 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Role)
+                @Html.DisplayNameFor(model => model.RoleId)
             </th>
             <th></th>
         </tr>
@@ -46,6 +63,8 @@
 		@foreach (var item in Model) {
 				<tr>
 					<td>
+                        @* todo: write through item *@
+                        @* HTML Helper: writes the data of the UserName property in the UserModel class. *@
 						@Html.DisplayFor(modelItem => item.UserName)
 					</td>
 					<td>
@@ -58,11 +77,21 @@
 						@Html.DisplayFor(modelItem => item.Status)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Role.Id)
+						@Html.DisplayFor(modelItem => item.RoleId)
 					</td>
 					<td>
-						<a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
-						<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
+                        @* todo: query string *@
+                        @* HTML: *@
+                        @* <a href="/Users/Details/@item.Id">Details</a> *@
+                        @* Example: <a href="/Users/Details/13">Details</a> *@
+                        @* HTML Helper: the last parameter of the helper method is the route value which must be the same as action's parameter name (id) *@
+						@* @Html.ActionLink("Details", "Details", new { id = item.Id }) *@
+                        @* Tag Helper Way 1: asp-route-id is the route value which must be the same as action's parameter name (id) *@
+                        @* <a asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp; *@
+                        @* Tag Helper Way 2: *@
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
+						
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
 						<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
 					</td>
 				</tr>

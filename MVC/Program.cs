@@ -1,3 +1,4 @@
+using Business;
 using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,23 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
                                                      // inherited from the DbContext as the generic type
                                                      // for AddDbContext method.
     .UseMySQL("server=127.0.0.1;database=test;user id=std;password=;"));
+
+// AddScoped: The object's reference (usually an interface or abstract class) is used to instantiate an object
+// through constructor injection when a request is received and the object lives until the response is returned.
+// AddDbContext is a scoped method by default.
+// AddSingleton: The object's reference (usually an interface or abstract class) is used to instantiate an object
+// through constructor injection when a request is received and the only one object lives throughout
+// the application's lifetime (as long as the application is running and not stopped or restarted for example
+// via IIS: Internet Information Services or Kestrel web server applications).
+// AddTransient: The object is instantiated every time whenever a constructor injection through the
+// object's reference (usually an interface or abstract class) is used, independent from the request.
+// Generally the AddScoped method is used.
+// Way 1:
+// builder.Services.AddSingleton<IUserService, UserService>();
+// Way 2:
+// builder.Services.AddTransient<IUserService, UserService>();
+// Way 3:
+builder.Services.AddScoped<IUserService, UserService>();
 #endregion
 
 builder.Services.AddControllersWithViews();
