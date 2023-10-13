@@ -19,7 +19,11 @@
     string title = "User List";
     ViewData["Title"] = title; @* ViewData is used for carrying data between views and from actions to views. *@
 
-    int count = Model.Count(); @* Count method returns the element count of an IEnumerable collection. *@
+    int count = Model.Count();
+    @* Count method returns the element count of an IEnumerable collection. *@
+
+    @* Ternary Operator *@
+    string countOutput = count == 0 ? "No records found." : count == 1 ? "1 record found." : count + " records found.";
 }
 
 <h1>@title</h1> @* The string value set above will be written in the h1 tag. *@
@@ -33,7 +37,10 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-@* todo: write count *@
+@* displaying the model's element count *@
+<p class="text-success">
+    @countOutput
+</p>
 
 <table class="table">
     <thead>
@@ -48,13 +55,13 @@
                 @Html.DisplayNameFor(model => model.Password)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                @Html.DisplayNameFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleId)
+                @Html.DisplayNameFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
             </th>
             <th></th>
         </tr>
@@ -63,32 +70,49 @@
 		@foreach (var item in Model) {
 				<tr>
 					<td>
-                        @* todo: write through item *@
-                        @* HTML Helper: writes the data of the UserName property in the UserModel class. *@
+
+                        @* Way 1: *@
+                        @* @item.UserName *@
+                        @* Way 2: HTML Helper: writes the data of the UserName property in the UserModel class. *@
 						@Html.DisplayFor(modelItem => item.UserName)
+
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Password)
+
+						@* Way 1: replacing password characters with an asterisk character in view *@
+                        @* @{
+                            string hiddenPassword = "";
+                            foreach (char character in item.Password)
+                            {
+                                hiddenPassword += "*";
+                            }
+                        }
+                        @hiddenPassword *@
+                        @* Way 2: replacing password characters with an asterisk character in service *@
+                        @Html.DisplayFor(m => item.Password)
+
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.IsActive)
+						@Html.DisplayFor(modelItem => item.IsActiveOutput) @* property for formatted or extra data in the service *@
 					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Status)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.RoleId)
+						@Html.DisplayFor(modelItem => item.RoleNameOutput) @* property for formatted or extra data in the service *@
 					</td>
 					<td>
-                        @* todo: query string *@
-                        @* HTML: *@
+                        @* HTML Way 1: query string *@
+                        @* <a href="/Users/Details?id=@item.Id">Details</a> *@
+                        @* Example: <a href="/Users/Details?id=13">Details</a> *@
+                        @* HTML Way 2: route value *@
                         @* <a href="/Users/Details/@item.Id">Details</a> *@
                         @* Example: <a href="/Users/Details/13">Details</a> *@
                         @* HTML Helper: the last parameter of the helper method is the route value which must be the same as action's parameter name (id) *@
 						@* @Html.ActionLink("Details", "Details", new { id = item.Id }) *@
                         @* Tag Helper Way 1: asp-route-id is the route value which must be the same as action's parameter name (id) *@
                         @* <a asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp; *@
-                        @* Tag Helper Way 2: *@
+                        @* Tag Helper Way 2: no need to write the controller *@
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
 						
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;

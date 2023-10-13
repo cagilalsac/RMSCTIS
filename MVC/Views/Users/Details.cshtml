@@ -3,7 +3,7 @@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "User Details";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -25,10 +25,10 @@
             @Html.DisplayFor(model => model.Password)
         </dd>
         <dt class="col-2">
-            @Html.DisplayNameFor(model => model.IsActive)
+            @Html.DisplayNameFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
         </dt>
         <dd class="col-10">
-            @Html.DisplayFor(model => model.IsActive)
+            @Html.DisplayFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
         </dd>
         <dt class="col-2">
             @Html.DisplayNameFor(model => model.Status)
@@ -37,16 +37,19 @@
             @Html.DisplayFor(model => model.Status)
         </dd>
         <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Role)
+            @Html.DisplayNameFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
         </dt>
         <dd class="col-10">
-            @Html.DisplayFor(model => model.Role.Id)
+            @Html.DisplayFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
         </dd>
     </dl>
 </div>
 <div>
+
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>&nbsp;|&nbsp;
-    <a asp-action="Index">Back to List</a>
+    @* ? means Model object of type UserModel can be null, therefore it prevents null reference exception *@
+
+    <a asp-action="GetList">Back to List</a>
 </div>
 
 

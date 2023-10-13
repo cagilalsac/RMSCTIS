@@ -1,4 +1,5 @@
 ﻿using DataAccess.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business;
 
@@ -30,16 +31,33 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
         // then for records with same IsActive data order UserName ascending
         // then for each element in the User entity collection map user entity
         // properties to the desired user model properties (projection) and return the query.
-        return _db.Users.OrderByDescending(e => e.IsActive)
+        // In Entity Framework Core, lazy loading (loading related data automatically without the need to include it) 
+        // is not active by default if projection is not used. To use eager loading (loading related data 
+        // on-demand with include), you can write the desired related entity property on the DbSet retrieved from 
+        // the _db using the Include method either through a lambda expression or a string. If you want to include 
+        // the related entity property of the included entity, you should write it through a delegate of type
+        // included entity in the ThenInclude method. However, if the ThenInclude method is to be used, 
+        // a lambda expression should be used in the Include method.
+        return _db.Users.Include(e => e.Role).OrderByDescending(e => e.IsActive)
             .ThenBy(e => e.UserName)
             .Select(e => new UserModel()
             {
+                // model - entity property assignments
                 Id = e.Id,
                 IsActive = e.IsActive,
-                Password = e.Password,
+
+                // Way 1: replacing password characters with an asterisk character in view
+                //Password = e.Password,
+                // Way 2: replacing password characters with an asterisk character in service
+                Password = new string('*', e.Password.Length),
+
                 RoleId = e.RoleId,
                 Status = e.Status,
-                UserName = e.UserName
+                UserName = e.UserName,
+
+                // modified model - entity property assignments for displaying in views
+                IsActiveOutput = e.IsActive ? "Yes" : "No",
+                RoleNameOutput = e.Role.Name
             });
     }
 }

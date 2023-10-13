@@ -20,3 +20,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+
+/* CSS classes that we create */
+.layoutheader {
+    color: darkorange !important;
+    font-weight: bold;
+}

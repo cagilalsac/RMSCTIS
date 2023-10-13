@@ -29,4 +29,12 @@ public class UserModel
     [DisplayName("Role")]
     public int RoleId { get; set; }
     #endregion
+
+    #region Extra properties required for the views
+    [DisplayName("Active")]
+    public string IsActiveOutput { get; set; }
+
+    [DisplayName("Role")]
+    public string RoleNameOutput { get; set; }
+    #endregion
 }

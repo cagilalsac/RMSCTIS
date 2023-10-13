@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVC</title>
+    <title>@ViewData["Title"] - RMS</title>@* titles set in the views will be written here *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
@@ -12,7 +12,13 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
+
+                @* Way 1: HTML Helper *@
+                @* @Html.ActionLink("RMS", "Index", "Home", new { @class = "navbar-brand layoutheader", area = "" }) *@
+                @* Way 2: Tag Helper *@
+                <a class="navbar-brand layoutheader" asp-area="" asp-controller="Home" asp-action="Index">RMS</a>
+                @* layoutheader CSS class can be found in wwwroot/css/site.css *@
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,10 +26,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="GetList">User List</a>
                         </li>
                     </ul>
                 </div>
@@ -32,13 +35,16 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @RenderBody() @* views that we create are rendered here *@
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            
+            &copy; @DateTime.Now.Year - RMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @* DateTime.Now returns the date and time when it is executed, Year returns the year part *@
+
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
