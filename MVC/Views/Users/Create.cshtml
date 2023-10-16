@@ -3,7 +3,7 @@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create User";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -12,14 +12,48 @@
 <hr />
 <div class="row">
     <div class="col-12">
-        <form asp-action="Create">
-		@Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger"></div>
+
+		@* HTML: *@
+		@*<form action="/Users/Create" method="post">*@ @* default method: get *@
+		@* Tag Helper Way 1: *@
+        @*<form asp-action="Create" asp-controller="Users">*@
+		@* Tag Helper Way 2: *@
+		@* <form asp-action="Create"> *@ @* default method: post *@
+		@* HTML Helper: Way 1: *@
+		@* @using (Html.BeginForm("Create", "Users", FormMethod.Post)) *@
+		@* HTML Helper: Way 2: *@
+		@using (Html.BeginForm()) @* default method: post *@
+		{
+			@Html.AntiForgeryToken()
+
+			@* Tag Helper: *@
+            @* <div asp-validation-summary="All" class="text-danger"></div> *@
+			@* HTML Helper: *@
+			@Html.ValidationSummary(false, null, new { @class = "text-danger" })
+
             <div class="row mb-3">
-                <label asp-for="UserName" class="col-2 col-form-label"></label>
+
+				@* HTML: *@
+				@* <label class="col-2 col-form-label" style="font-weight:bold">User Name</label> *@
+				@* Tag Helper: *@
+                @* <label asp-for="UserName" class="col-2 col-form-label" style="font-weight:bold"></label> *@
+				@* HTML Helper: *@
+				@Html.LabelFor(model => model.UserName, new { style = "font-weight:bold" })
+
 				<div class="col-5">
-					<input asp-for="UserName" class="form-control" />
-					<span asp-validation-for="UserName" class="text-danger"></span>
+
+					@* HTML: *@
+					@* <input name="UserName" type="text" class="form-control" placeholder="Enter user name..." /> *@
+					@* Tag Helper: *@
+					@* <input asp-for="UserName" class="form-control" placeholder="Enter user name..." /> *@
+					@* HTML Helper: *@
+					@Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Enter user name..." })
+
+					@* Tag Helper: *@
+					@* <span asp-validation-for="UserName" class="text-danger"></span> *@
+					@* HTML Helper: *@
+					@Html.ValidationMessageFor(u => u.UserName, null, new { @class = "text-danger" })
+
 				</div>
             </div>
             <div class="row mb-3">
@@ -62,7 +96,8 @@
 					<a asp-action="Index">Back to List</a>
 				</div>
             </div>
-        </form>
+        @* </form> *@
+		}
     </div>
 </div>
 
