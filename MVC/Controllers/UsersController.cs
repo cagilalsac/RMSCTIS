@@ -1,5 +1,6 @@
 #nullable disable
 using Business;
+using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,20 +10,22 @@ namespace MVC.Controllers
     public class UsersController : Controller
     {
         // Add service injections here
-        #region User Service Constructor Injection
+        #region User and Role Service Constructor Injections
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
 
-        // An object of type UserService which is implemented from the IUserService
-        // interface is injected to this class through the constructor therefore
-        // user CRUD and other operations can be performed with this object.
-        public UsersController(IUserService userService)
-        {
-            _userService = userService;
-        }
-        #endregion
+		// Objects of type UserService and RoleService which are implemented from the IUserService
+        // and IRoleService interfaces are injected to this class through the constructor therefore
+		// user and role CRUD and other operations can be performed with these objects.
+		public UsersController(IUserService userService, IRoleService roleService)
+		{
+			_userService = userService;
+			_roleService = roleService;
+		}
+		#endregion
 
-        // GET: Users/GetList
-        public IActionResult GetList()
+		// GET: Users/GetList
+		public IActionResult GetList()
         {
             // A query is executed and the result is stored in the collection
             // when ToList method is called.
@@ -77,7 +80,16 @@ namespace MVC.Controllers
         public IActionResult Create()
         {
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            ViewData["RoleId"] = new SelectList(null, "Id", "Id");
+            
+            // Creation of a SelectList object with parameters in order as role list, value member of each element
+            // to be used in the background through related model property name (Id) and display member of each element
+            // to be shown to the user through related model property name (Name) and assignment to the
+            // ViewData through the Roles key.
+            // Way 1 ViewData:
+            ViewData["Roles"] = new SelectList(_roleService.Query().ToList(), "Id", "Name");
+            // Way 2: ViewBag which is the same object as ViewData
+            // todo
+            
             return View();
         }
 

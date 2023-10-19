@@ -1,4 +1,5 @@
 using Business;
+using Business.Services;
 using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +43,8 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
 // builder.Services.AddTransient<IUserService, UserService>();
 // Way 3:
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IRoleService, RoleService>();
 #endregion
 
 builder.Services.AddControllersWithViews();
