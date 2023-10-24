@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
-    public class UsersController : Controller
+	public class UsersController : Controller
     {
         // Add service injections here
         #region User and Role Service Constructor Injections
@@ -77,6 +77,7 @@ namespace MVC.Controllers
         }
 
         // GET: Users/Create
+        [HttpGet] // action method which is get by default when not written
         public IActionResult Create()
         {
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
@@ -86,28 +87,39 @@ namespace MVC.Controllers
             // to be shown to the user through related model property name (Name) and assignment to the
             // ViewData through the Roles key.
             // Way 1 ViewData:
-            ViewData["Roles"] = new SelectList(_roleService.Query().ToList(), "Id", "Name");
+            //ViewData["Roles"] = new SelectList(_roleService.Query().ToList(), "Id", "Name");
             // Way 2: ViewBag which is the same object as ViewData
-            // todo
-            
-            return View();
+            ViewBag.Roles = new SelectList(_roleService.Query().ToList(), "Id", "Name");
+
+			return View(); // returning Views/Users/Create view with no model data
         }
 
         // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(UserModel user)
+        [HttpPost] // action method which is used for processing request data sent by a form or AJAX
+        [ValidateAntiForgeryToken] // attribute for preventing Cross-Site Request Forgery (CSRF) 
+        // Way 1: catching data with parameters through form input elements' name HTML attribute
+        //public IActionResult Create(string UserName, string Password, bool IsActive, Statuses Status, int RoleId)
+        // Way 2:
+        public IActionResult Create(UserModel user) // since UserModel has properties for above parameters, it should be used as action parameter
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) // validates the user action parameter (model) through data annotations above its properties
             {
-                // TODO: Add insert service logic here
-                return RedirectToAction(nameof(Index));
+                // If model data is valid, insert service logic should be written here.
+                // todo: insted of Index, GetList must be used
+                return RedirectToAction(nameof(Index)); // redirection to the action specified of this controller to get the updated list from database
             }
+
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            ViewData["RoleId"] = new SelectList(null, "Id", "Id", user.RoleId);
-            return View(user);
+            // Way 1: SelectList constructor last parameter is the selected value
+            //ViewBag.Roles = new SelectList(_roleService.Query().ToList(), "Id", "Name", user.RoleId);
+			// Way 2:
+			ViewBag.Roles = new SelectList(_roleService.Query().ToList(), "Id", "Name");
+
+			// Returning the model containing the data entered by the user to the view therefore
+            // the user can correct validation errors without losing data of the form input elements.
+			return View(user); 
         }
 
         // GET: Users/Edit/5

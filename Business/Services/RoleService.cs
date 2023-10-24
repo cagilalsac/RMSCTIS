@@ -22,7 +22,7 @@ namespace Business.Services
 			return _db.Roles.OrderBy(r => r.Name).Select(r => new RoleModel()
 			{
 				Id = r.Id,
-				Name = r.Name // todo: first letter to upper others to lower
+				Name = r.Name.Substring(0, 1).ToUpper() + r.Name.Substring(1).ToLower()
 			});
 		}
 	}

@@ -129,8 +129,37 @@ entity class to the model class).
 7.4) If the view that the model will be used requires formatted or extra data, new properties
 should be added to the model class and set in the related service's methods.
 
-7.5) Within the model classes, DisplayName data annotations (attributes) must be defined above the properties
-which will be used in the related views.
+7.5) Within the model classes, data annotations (attributes) such as DisplayName, Required, StringLength, etc. 
+must be defined above the properties which will be used in the related views.
+
+Here is a list of some data annotations for entities and models:
+
+Note: Data annotations are used for simple validations in models based on model data only. 
+For instance, if validation is required based on a table in the database, it should be done in service classes.
+
+Note: Data annotations of entities are used for database table strcutures.
+
+DisplayName: Used for setting the display name to be shown in the views or to be used in other data annotation error messages.
+Key (Entity): Indicates that the property is a primary key and creates it as an automatically incremented column in the table.
+Required (Entity and Model): Indicates that the property value is required.
+Column (Entity): Specifies settings related to the property's column in the database table, such as the column name, data type, 
+and order (used for multiple keys).
+DataType (Model): Used to specify the data type of the property. For example Text, Date, Time, DateTime, Currency, EmailAddress, 
+PhoneNumber, Password, etc.
+ReadOnly (Model): Used to make the property read-only therefore its value can't be set.
+DisplayFormat (Model): Specifies the format to be used in text data representation, often used for formatting operations for 
+date, decimal numbers, etc.
+Table (Entity): Used to change the name of the table that will be created in the database.
+StringLength (Entity and Model): Used to specify the maximum character length for text properties.
+MinLength (Model): Used to specify the minimum character length for text properties.
+MaxLength (Model): Used to specify the maximum character length for text properties.
+Compare (Model): Used to compare data of the property with another property specified.
+RegularExpression (Model): A validation pattern that can be used for more detailed data validation.
+Range (Model): Used to specify a range for numerical values.
+EmailAddress (Model): Used to ensure that the property data is in e-mail format.
+Phone (Model): Used to ensure that the property data is in phone number format.
+NotMapped (Entity): Used to prevent the property from being created as a column in the corresponding table in the database.
+JsonIgnore (Model): Ensures that the property is not included in the generated JSON data.
 
 7.6) In the MVC layer, the views should be edited according to the view's model such that the model properties 
 for user interaction should be used.
@@ -141,3 +170,16 @@ Instead of HTML, HTML Helpers or Tag Helpers should be used.
 For example, another request to the Users controller's Details action can be sent by writing
 https://localhost:7275/Users/Details/6 in the address of a browser or creating a link in a view using the 
 HTML anchor tag such that <a href="/Users/Details/6">Details</a>.
+
+7.7) By scaffolding defaults, the Create, Edit and Delete actions have two overloaded methods.
+For example, for create and edit operations the first action is the get action which returns the view containing
+the HTML form to the user for editing or entering new data. If required, extra data not related to the model can be
+carried to the view by using ViewBag or ViewData. The second action for create and edit operations is the 
+post action marked with the HttpPost action method which is used for sending form data to the action 
+using the related view's model as parameter. Inside these post actions, after the model data is validated by
+ModelState, database create and update operations are performed by the related services. If there are
+validation errors catched by the ModelState through model's data annotations, the related view is returned with
+the model containing user entered data. For delete operation, the get action returns the model data to the view
+to show the details. If the submit button within the form is clicked, the hidden input for id value is sent to the
+delete operation's post action and catched by id action parameter, then delete operation is performed through 
+the related service by using the id value.

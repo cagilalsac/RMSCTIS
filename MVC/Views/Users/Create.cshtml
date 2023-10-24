@@ -26,6 +26,10 @@
 		@* HTML Helper: Way 2: *@
 		@using (Html.BeginForm()) @* default method: post *@
 		{
+			@* 
+				Controlled by ValidateAntiForgeryToken attribute above the Create post action in the controller 
+				and ensures request data to be sent from only this view. 
+			*@
 			@Html.AntiForgeryToken()
 
 			@* Tag Helper: *@
@@ -143,11 +147,11 @@
 						<option value="2">User</option>
 					</select> *@
 					@* Tag Helper: *@
-					<select asp-for="RoleId" class="form-select" asp-items="ViewBag.Roles">
+					@* <select asp-for="RoleId" class="form-select" asp-items="ViewBag.Roles">
 						<option value="">-- Select --</option><!-- optional: if we want to add an item for select indication -->
-					</select>
+					</select> *@
 					@* HTML Helper: *@
-					@* todo *@
+					@Html.DropDownListFor(m => m.RoleId, ViewData["Roles"] as SelectList, "-- Select --", new { @class = "form-select" })
 
 					<span asp-validation-for="RoleId" class="text-danger"></span>
 				</div>
