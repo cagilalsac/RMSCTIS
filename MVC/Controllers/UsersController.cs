@@ -1,5 +1,6 @@
 #nullable disable
 using Business;
+using Business.Results.Bases;
 using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -107,8 +108,11 @@ namespace MVC.Controllers
             if (ModelState.IsValid) // validates the user action parameter (model) through data annotations above its properties
             {
                 // If model data is valid, insert service logic should be written here.
-                // todo: insted of Index, GetList must be used
-                return RedirectToAction(nameof(Index)); // redirection to the action specified of this controller to get the updated list from database
+                Result result = _userService.Add(user); // result referenced object can be of type SuccessResult or ErrorResult
+                // Way 1:
+                //return RedirectToAction("GetList");
+                // Way 2:
+                return RedirectToAction(nameof(GetList)); // redirection to the action specified of this controller to get the updated list from database
             }
 
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items

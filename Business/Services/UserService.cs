@@ -1,12 +1,16 @@
-﻿using DataAccess.Contexts;
+﻿using Business.Results;
+using Business.Results.Bases;
+using DataAccess.Contexts;
+using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Business;
 
 public interface IUserService
 {
-    // method definitions
+    // method definitions: method definitions must be created here in order to be used in the related controller
     IQueryable<UserModel> Query();
+    Result Add(UserModel model);
 }
 
 public class UserService : IUserService // UserService is a IUserService (UserService implements IUserService)
@@ -59,5 +63,46 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
                 IsActiveOutput = e.IsActive ? "Yes" : "No",
                 RoleNameOutput = e.Role.Name
             });
+    }
+
+    public Result Add(UserModel model)
+    {
+        // Way 1: Data case sensitivity can be simply eliminated by using ToUpper or ToLower methods in both sides,
+		// Trim method can be used to remove the white spaces from the beginning and the end of the data.
+        //User existingUser = _db.Users.SingleOrDefault(u => u.UserName.ToUpper() == model.UserName.ToUpper().Trim());
+        //if (existingUser is not null)
+        //    return new ErrorResult("User with the same user name already exists!");
+        // Way 2:
+        if (_db.Users.Any(u => u.UserName.ToUpper() == model.UserName.ToUpper().Trim()))
+			return new ErrorResult("User with the same user name already exists!");
+
+		// entity creation from the model
+		User user = new User()
+        {
+            IsActive = model.IsActive,
+            UserName = model.UserName.Trim(),
+            Password = model.Password.Trim(),
+
+			// Way 1:
+			//RoleId = model.RoleId != null ? model.RoleId.Value : 0,
+			// Way 2:
+			//RoleId = model.RoleId is not null ? model.RoleId.Value : 0,
+			// Way 3:
+			//RoleId = model.RoleId.HasValue ? model.RoleId.Value : 0,
+			// Way 4:
+			//RoleId = model.RoleId.Value, // if we are sure that RoleId has a value
+			// Way 5:
+			RoleId = model.RoleId ?? 0,
+
+            Status = model.Status
+		};
+		
+		// adding entity to the related db set
+        _db.Users.Add(user);
+		
+		// changes in all of the db sets are commited to the database with Unit of Work
+        _db.SaveChanges(); 
+
+        return new SuccessResult("User added successfully.");
     }
 }
