@@ -58,9 +58,6 @@
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
             </th>
             <th>
@@ -81,21 +78,6 @@
                         @* @item.UserName *@
                         @* Way 2: HTML Helper: writes the data of the UserName property in the UserModel class. *@
 						@Html.DisplayFor(modelItem => item.UserName)
-
-					</td>
-					<td>
-
-						@* Way 1: replacing password characters with an asterisk character in view *@
-                        @* @{
-                            string hiddenPassword = "";
-                            foreach (char character in item.Password)
-                            {
-                                hiddenPassword += "*";
-                            }
-                        }
-                        @hiddenPassword *@
-                        @* Way 2: replacing password characters with an asterisk character in service *@
-                        @Html.DisplayFor(m => item.Password)
 
 					</td>
 					<td>

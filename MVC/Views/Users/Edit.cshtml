@@ -1,3 +1,4 @@
+@using DataAccess.Enums;
 @model UserModel
 @*Generated from Custom Template.*@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
@@ -19,14 +20,14 @@
             <div class="row mb-3">
                 <label asp-for="UserName" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					<input asp-for="UserName" class="form-control" />
+					<input asp-for="UserName" class="form-control" placeholder="Enter user name..." />
 					<span asp-validation-for="UserName" class="text-danger"></span>
 				</div>
             </div>
             <div class="row mb-3">
                 <label asp-for="Password" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					<input asp-for="Password" class="form-control" type="password" />
+					<input asp-for="Password" class="form-control" type="password" placeholder="Password is not shown for security." />
 					<span asp-validation-for="Password" class="text-danger"></span>
 				</div>
             </div>
@@ -39,10 +40,12 @@
             <div class="row mb-3">
                 <label asp-for="Status" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					<input asp-for="Status" type="radio" class="col-2 col-form-label" />
-
-					
-					
+					<select asp-for="Status" class="form-select">
+						<option value="@((int)Statuses.Junior)">@Statuses.Junior</option>
+						<option value="@((int)Statuses.Senior)">@Statuses.Senior</option>
+						<option value="@((int)Statuses.Master)">@Statuses.Master</option>
+					</select>
+					<span asp-validation-for="Status" class="text-danger"></span>
 				</div>
             </div>
             <div class="row mb-3">
@@ -60,7 +63,7 @@
 					&nbsp;&nbsp;
                     <button type="reset" class="btn btn-outline-primary">Reset</button>
 					&nbsp;&nbsp;
-					<a asp-action="Index">Back to List</a>
+					<a asp-action="GetList">Back to List</a>
 				</div>
             </div>
         </form>
