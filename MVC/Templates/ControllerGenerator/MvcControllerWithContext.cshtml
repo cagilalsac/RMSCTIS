@@ -77,12 +77,12 @@ namespace @Model.ControllerNamespace
     var serviceInterfaceName = Model.ModelVariable + "Service";
     var constructorLine = "public " + Model.ControllerName + "(" + serviceInterfaceType + " " + serviceInterfaceName + ")";
     var modelType = Model.ModelTypeName + "Model";
-    var listLine = "List<" + modelType + "> " + Model.ModelVariable + "List = null;";
+    var listLine = "List<" + modelType + "> " + Model.ModelVariable + "List = new List<" + modelType + ">"();";
     var viewLine = "return View(" + Model.ModelVariable + "List);";
 }
     public class @Model.ControllerName : Controller
     {
-        // Add service injections here
+        // TODO: Add service injections here
         private readonly @serviceInterfaceType @("_" + serviceInterfaceName);
 
         @constructorLine
@@ -111,11 +111,11 @@ namespace @Model.ControllerNamespace
         // GET: @routePrefix/Create
         public IActionResult Create()
         {
-            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(null, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(new List<SelectListItem>(), "Value", "Text");
     }
 }            return View();
         }
@@ -137,11 +137,11 @@ namespace @Model.ControllerNamespace
                 @:// TODO: Add insert service logic here
 }                return RedirectToAction(nameof(Index));
             }
-            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(null, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(new List<SelectListItem>(), "Value", "Text");
     }
 }
             return View(@Model.ModelVariable);
@@ -155,11 +155,11 @@ namespace @Model.ControllerNamespace
             {
                 return NotFound();
             }
-            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(null, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(new List<SelectListItem>(), "Value", "Text");
     }
 }
             return View(@Model.ModelVariable);
@@ -179,11 +179,11 @@ namespace @Model.ControllerNamespace
 }
                 return RedirectToAction(nameof(Index));
             }
-            // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(null, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(new List<SelectListItem>(), "Value", "Text");
     }
 }
             return View(@Model.ModelVariable);

@@ -3,7 +3,7 @@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit User";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -26,7 +26,7 @@
             <div class="row mb-3">
                 <label asp-for="Password" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					<input asp-for="Password" class="form-control" />
+					<input asp-for="Password" class="form-control" type="password" />
 					<span asp-validation-for="Password" class="text-danger"></span>
 				</div>
             </div>
@@ -39,10 +39,10 @@
             <div class="row mb-3">
                 <label asp-for="Status" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					<select asp-for="Status" class="form-select">
-						<option value="">-- Select --</option>
-					</select>
-					<span asp-validation-for="Status" class="text-danger"></span>
+					<input asp-for="Status" type="radio" class="col-2 col-form-label" />
+
+					
+					
 				</div>
             </div>
             <div class="row mb-3">
@@ -67,6 +67,13 @@
     </div>
 </div>
 
+@section Scripts {
+	@* For Client-Side Validation: Validation with the browser using Javascript (jQuery Validation) *@
+	@* Way 1: *@
+    @* @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} *@
+	@* Way 2: *@
+	<partial name="_ValidationScriptsPartial" />
+}
 
 
 

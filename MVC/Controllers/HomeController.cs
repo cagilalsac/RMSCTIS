@@ -18,7 +18,7 @@ namespace MVC.Controllers
         |
         (implements IActionResult) ActionResult 
         |
-        (inherits from ActionResult) ViewResult - ContentResult - RedirectResults
+        (inherits from ActionResult) ViewResult - ContentResult - RedirectResults - HttpStatusCodeResults
         */
         // Way 1:
         //public ViewResult Index()

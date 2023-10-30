@@ -67,10 +67,10 @@
         else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
         {
         <dt class="col-2">
-            @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+            @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation)Id)
         </dt>
         <dd class="col-10">
-            @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+            @@Html.DisplayFor(model => model.@GetValueExpression(navigation)Id)
         </dd>
         }
     }

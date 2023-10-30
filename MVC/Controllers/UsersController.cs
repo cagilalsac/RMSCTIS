@@ -109,10 +109,20 @@ namespace MVC.Controllers
             {
                 // If model data is valid, insert service logic should be written here.
                 Result result = _userService.Add(user); // result referenced object can be of type SuccessResult or ErrorResult
-                // Way 1:
-                //return RedirectToAction("GetList");
-                // Way 2:
-                return RedirectToAction(nameof(GetList)); // redirection to the action specified of this controller to get the updated list from database
+                if (result.IsSuccessful)
+                {
+                    // Way 1:
+                    //return RedirectToAction("GetList");
+                    // Way 2:
+                    TempData["Message"] = result.Message; // if there is a redirection, the data should be carried with TempData to the redirected action's view
+                    return RedirectToAction(nameof(GetList)); // redirection to the action specified of this controller to get the updated list from database
+                }
+
+				// Way 1:  carrying data from the action with ViewData
+				//ViewBag.Message = result.Message; // ViewData["Message"] = result.Message;
+				// Way 2: sends data to view's validation summary
+				ModelState.AddModelError("", result.Message); 
+
             }
 
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
@@ -129,13 +139,13 @@ namespace MVC.Controllers
         // GET: Users/Edit/5
         public IActionResult Edit(int id)
         {
-            UserModel user = null; // TODO: Add get item service logic here
+            UserModel user = _userService.Query().SingleOrDefault(u => u.Id == id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound(); // 404 HTTP Status Code
             }
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            ViewData["RoleId"] = new SelectList(null, "Id", "Id", user.RoleId);
+            ViewBag.RoleId = new SelectList(_roleService.Query().ToList(), "Id", "Name");
             return View(user);
         }
 
@@ -152,7 +162,7 @@ namespace MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            ViewData["RoleId"] = new SelectList(null, "Id", "Id", user.RoleId);
+            ViewData["RoleId"] = new SelectList(new List<SelectListItem>(), "Value", "Text");
             return View(user);
         }
 

@@ -49,12 +49,7 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
                 // model - entity property assignments
                 Id = e.Id,
                 IsActive = e.IsActive,
-
-                // Way 1: replacing password characters with an asterisk character in view
-                //Password = e.Password,
-                // Way 2: replacing password characters with an asterisk character in service
-                Password = new string('*', e.Password.Length),
-
+				Password = e.Password,
                 RoleId = e.RoleId,
                 Status = e.Status,
                 UserName = e.UserName,

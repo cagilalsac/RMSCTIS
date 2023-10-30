@@ -37,8 +37,14 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+@* if there is a redirection in an action, the data should be carried with TempData to the redirected action's view *@
+@if (TempData["Message"] is not null)
+{
+    <p class="text-success">@TempData["Message"]</p>
+}
+
 @* displaying the model's element count *@
-<p class="text-success">
+<p class="text-info">
     @countOutput
 </p>
 

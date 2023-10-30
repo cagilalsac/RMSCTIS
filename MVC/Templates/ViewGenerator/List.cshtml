@@ -64,7 +64,7 @@
             else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
             {
             <th>
-                @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+                @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation)Id)
             </th>
             }
         }
@@ -86,7 +86,7 @@
 					else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
 					{
 					<td>
-						@@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+						@@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation)Id)
 					</td>
 					}
 				}

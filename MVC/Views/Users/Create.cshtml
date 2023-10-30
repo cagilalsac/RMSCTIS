@@ -32,6 +32,12 @@
 			*@
 			@Html.AntiForgeryToken()
 
+			@* Way 1: carrying data from the action with ViewData *@
+			@* @if (ViewBag.Message is not null)
+			{
+				<p class="text-danger">@ViewBag.Message</p>
+			} *@
+			@* Way 2: ModelState in the action sends data to view's validation summary *@
 			@* Tag Helper: *@
             @* <div asp-validation-summary="All" class="text-danger"></div> *@
 			@* HTML Helper: *@
