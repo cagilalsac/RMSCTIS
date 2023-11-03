@@ -1,0 +1,34 @@
+﻿@model UserModel
+
+<dl class="row">
+    <dt class="col-2">
+        @Html.DisplayNameFor(model => model.UserName)
+    </dt>
+    <dd class="col-10">
+        @Html.DisplayFor(model => model.UserName)
+    </dd>
+    <dt class="col-2">
+        @Html.DisplayNameFor(model => model.Password)
+    </dt>
+    <dd class="col-10">
+        @Html.DisplayFor(model => model.Password)
+    </dd>
+    <dt class="col-2">
+        @Html.DisplayNameFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
+    </dt>
+    <dd class="col-10">
+        @Html.DisplayFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
+    </dd>
+    <dt class="col-2">
+        @Html.DisplayNameFor(model => model.Status)
+    </dt>
+    <dd class="col-10">
+        @Html.DisplayFor(model => model.Status)
+    </dd>
+    <dt class="col-2">
+        @Html.DisplayNameFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
+    </dt>
+    <dd class="col-10">
+        @Html.DisplayFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
+    </dd>
+</dl>

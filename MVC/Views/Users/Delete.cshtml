@@ -3,7 +3,7 @@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete User";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -12,44 +12,23 @@
 <div>
     <h4>User</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Role)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Role.Id)
-        </dd>
-    </dl>
-    
+
+    <!-- 
+        Partial views are used for rounding up common parts of the views. 
+        They can be used with or without model.
+    -->
+    <partial name="_Details" model="Model" />
+    <!-- created under Views\Users\_Details.cshtml and this view's model is passed to the partial view to show model data -->
+
+    <!-- 
+        The id of the model will be sent to the Users controller Delete post action when we click the Yes submit button so that
+        the user with the id can be deleted by the related service method.
+    -->
     <form asp-action="Delete">
-	@Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Yes" class="btn btn-danger" />&nbsp;&nbsp;
-        <a asp-action="Index" class="btn btn-success">No</a>
+        <a asp-action="GetList" class="btn btn-success">No</a>
     </form>
 </div>
 

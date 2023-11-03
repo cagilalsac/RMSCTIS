@@ -11,6 +11,7 @@ public interface IUserService
     // method definitions: method definitions must be created here in order to be used in the related controller
     IQueryable<UserModel> Query();
     Result Add(UserModel model);
+    Result Update(UserModel model);
 }
 
 public class UserService : IUserService // UserService is a IUserService (UserService implements IUserService)
@@ -62,17 +63,23 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
 
     public Result Add(UserModel model)
     {
+        // Checking if the user with the same user name exists in the database table:
         // Way 1: Data case sensitivity can be simply eliminated by using ToUpper or ToLower methods in both sides,
-		// Trim method can be used to remove the white spaces from the beginning and the end of the data.
+        // Trim method can be used to remove the white spaces from the beginning and the end of the data.
         //User existingUser = _db.Users.SingleOrDefault(u => u.UserName.ToUpper() == model.UserName.ToUpper().Trim());
         //if (existingUser is not null)
         //    return new ErrorResult("User with the same user name already exists!");
-        // Way 2:
-        if (_db.Users.Any(u => u.UserName.ToUpper() == model.UserName.ToUpper().Trim()))
-			return new ErrorResult("User with the same user name already exists!");
+        // Way 2: may cause problems for Turkish characters such as İ, i, I and ı
+        //if (_db.Users.Any(u => u.UserName.ToUpper() == model.UserName.ToUpper().Trim()))
+        //    return new ErrorResult("User with the same user name already exists!");
+        // Way 3: not effective since we are getting all the users from the database table but we can use StringComparison
+        // for the correct case insensitive data equality, StringComparison can also be used in Contains, StartsWith and EndsWith methods
+        List<User> existingUsers = _db.Users.ToList();
+        if (existingUsers.Any(u => u.UserName.Equals(model.UserName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            return new ErrorResult("User with the same user name already exists!");
 
-		// entity creation from the model
-		User user = new User()
+        // entity creation from the model
+        User user = new User()
         {
             IsActive = model.IsActive,
             UserName = model.UserName.Trim(),
@@ -99,5 +106,39 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
         _db.SaveChanges(); 
 
         return new SuccessResult("User added successfully.");
+    }
+
+    public Result Update(UserModel model)
+    {
+        // Checking if the user other than the user to be updated (checking by id) with the same user name exists in the database table:
+        // Way 1: may cause problems for Turkish characters such as İ, i, I and ı
+        //if (_db.Users.Any(u => u.UserName.ToLower() == model.UserName.ToLower().Trim() && u.Id != model.Id))
+        //    return new ErrorResult("User with the same user name already exists!");
+        // Way 2: not effective since we are getting all the users other than the user with the model id from the database table
+        // but we can use StringComparison for the correct case insensitive data equality, StringComparison can also be used in
+        // Contains, StartsWith and EndsWith methods
+        var existingUsers = _db.Users.Where(u => u.Id != model.Id).ToList();
+        if (existingUsers.Any(u => u.UserName.Equals(model.UserName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            return new ErrorResult("User with the same user name already exists!");
+
+        // first getting the entity to be updated from the db set
+        var user = _db.Users.SingleOrDefault(u => u.Id == model.Id);
+
+        // then updating the entity properties
+        if (user is not null)
+        {
+            user.IsActive = model.IsActive;
+            user.UserName = model.UserName.Trim();
+            user.Password = model.Password.Trim();
+            user.RoleId = model.RoleId ?? 0;
+            user.Status = model.Status;
+
+            // updating the entity in the related db set
+            _db.Users.Update(user);
+
+            // changes in all of the db sets are commited to the database with Unit of Work
+            _db.SaveChanges();
+        }
+        return new SuccessResult("User updated successfully.");
     }
 }

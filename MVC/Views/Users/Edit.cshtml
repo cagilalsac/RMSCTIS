@@ -27,7 +27,7 @@
             <div class="row mb-3">
                 <label asp-for="Password" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					<input asp-for="Password" class="form-control" type="password" placeholder="Password is not shown for security." />
+					<input asp-for="Password" class="form-control" placeholder="Enter password..." id="password" /><!-- id is assigned for jQuery script below -->
 					<span asp-validation-for="Password" class="text-danger"></span>
 				</div>
             </div>
@@ -40,6 +40,7 @@
             <div class="row mb-3">
                 <label asp-for="Status" class="col-2 col-form-label"></label>
 				<div class="col-5">
+					<!-- displaying enum values and texts in the select tag: -->
 					<select asp-for="Status" class="form-select">
 						<option value="@((int)Statuses.Junior)">@Statuses.Junior</option>
 						<option value="@((int)Statuses.Senior)">@Statuses.Senior</option>
@@ -76,6 +77,12 @@
     @* @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} *@
 	@* Way 2: *@
 	<partial name="_ValidationScriptsPartial" />
+
+	<script>
+		$(function() {
+			$("#password").prop("type", "password"); // changes the input type to password for password data to be hidden
+		});
+	</script>
 }
 
 

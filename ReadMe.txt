@@ -179,7 +179,8 @@ post action marked with the HttpPost action method which is used for sending for
 using the related view's model as parameter. Inside these post actions, after the model data is validated by
 ModelState, database create and update operations are performed by the related services. If there are
 validation errors catched by the ModelState through model's data annotations, the related view is returned with
-the model containing user entered data. For delete operation, the get action returns the model data to the view
-to show the details. If the submit button within the form is clicked, the hidden input for id value is sent to the
-delete operation's post action and catched by id action parameter, then delete operation is performed through 
-the related service by using the id value.
+the model containing user entered data. If Client Side Validation is needed instead of Server Side Validation, 
+in the Create or Edit views <partial name="_ValidationScriptsPartial" /> must be added in the Scripts section.
+For delete operation, the get action returns the model data to the view to show the details. If the submit button 
+within the form is clicked, the hidden input for id value is sent to the delete operation's post action and catched by 
+id action parameter, then delete operation is performed through the related service by using the id value.

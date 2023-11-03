@@ -11,38 +11,14 @@
 <div>
     <h4>User</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.IsActiveOutput) @* property for formatted or extra data in the service *@
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
-        </dt>
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.RoleNameOutput) @* property for formatted or extra data in the service *@
-        </dd>
-    </dl>
+    
+    <!--
+        Partial views are used for rounding up common parts of the views.
+        They can be used with or without model.
+    -->
+    <partial name="_Details" model="Model" />
+    <!-- created under Views\Users\_Details.cshtml and this view's model is passed to the partial view to show model data -->
+
 </div>
 <div>
 

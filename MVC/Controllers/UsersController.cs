@@ -139,14 +139,14 @@ namespace MVC.Controllers
         // GET: Users/Edit/5
         public IActionResult Edit(int id)
         {
-            UserModel user = _userService.Query().SingleOrDefault(u => u.Id == id);
+            UserModel user = _userService.Query().SingleOrDefault(u => u.Id == id); // getting the model from the service
             if (user == null)
             {
                 return NotFound(); // 404 HTTP Status Code
             }
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            ViewBag.RoleId = new SelectList(_roleService.Query().ToList(), "Id", "Name");
-            return View(user);
+            ViewBag.RoleId = new SelectList(_roleService.Query().ToList(), "Id", "Name"); // filling the roles
+            return View(user); // returning the model to the view so that user can see the data to edit
         }
 
         // POST: Users/Edit
@@ -156,25 +156,31 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(UserModel user)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) // if no validation errors through data annotations of the model
             {
-                // TODO: Add update service logic here
-                return RedirectToAction(nameof(Index));
+                var result = _userService.Update(user); // update the user in the service
+                if (result.IsSuccessful)
+                {
+                    // if update operation result is successful, carry successful result message to the List view through the GetList action
+                    TempData["Message"] = result.Message;
+                    return RedirectToAction(nameof(GetList));
+                }
+                ModelState.AddModelError("", result.Message); // if unsuccessful, carry error result message to the view's validation summary
             }
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            ViewData["RoleId"] = new SelectList(new List<SelectListItem>(), "Value", "Text");
-            return View(user);
+            ViewBag.RoleId = new SelectList(_roleService.Query().ToList(), "Id", "Name"); // filling the roles
+            return View(user); // returning the model sent by application user to the view so he/she can correct the validation errors and try again
         }
 
         // GET: Users/Delete/5
         public IActionResult Delete(int id)
         {
-            UserModel user = null; // TODO: Add get item service logic here
+            UserModel user = _userService.Query().SingleOrDefault(u => u.Id == id); // getting the model from the service
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(user); // sending the model to the view so application user can see the details of the user
         }
 
         // POST: Users/Delete
