@@ -6,12 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Business;
 
+/// <summary>
+/// Performs user CRUD operations.
+/// </summary>
 public interface IUserService
 {
-    // method definitions: method definitions must be created here in order to be used in the related controller
-    IQueryable<UserModel> Query();
+	// method definitions: method definitions must be created here in order to be used in the related controller
+
+	/// <summary>
+	/// Queries the records in the Users table.
+	/// </summary>
+	/// <returns></returns>
+	IQueryable<UserModel> Query();
+
     Result Add(UserModel model);
     Result Update(UserModel model);
+
+	[Obsolete("Do not use this method anymore, use DeleteUser method instead!")]
+	Result Delete(int id);
+
+	Result DeleteUser(int id);
 }
 
 public class UserService : IUserService // UserService is a IUserService (UserService implements IUserService)
@@ -141,4 +155,57 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
         }
         return new SuccessResult("User updated successfully.");
     }
+
+	// Way 1:
+    public Result Delete(int id)
+	{
+        // for example if we wanted to get the first record of the UserResources DbSet there are 2 ways:
+        // Way 1:
+        //_db.UserResources.Where(ur => ur.UserId == id).FirstOrDefault();
+        // Way 2:
+        //_db.UserResources.FirstOrDefault(ur => ur.UserId == id);
+
+		// 1) deleting the relational user resource records:
+		// Since there may be none, one or more than one relational user resources, we filter by using Where
+		// LINQ method and get an IQueryable (can be thought as a collection) then create the user resource
+		// list by calling the ToList LINQ method.
+        var userResourceEntities = _db.UserResources.Where(ur => ur.UserId == id).ToList();
+
+        // Way 1: we can iterate through each user resource and delete it from the db set by calling Remove method
+        // foreach (var userResourceEntity in userResourceEntities) 
+        // {
+        //     _db.UserResources.Remove(userResourceEntity);
+		//}
+        // Way 2: we can use the RemoveRange method to remove one collection from another
+        _db.UserResources.RemoveRange(userResourceEntities);
+
+		// 2) deleting the user record:
+        var userEntity = _db.Users.SingleOrDefault(u => u.Id == id);
+        if (userEntity is null)
+            return new ErrorResult("User not found!");
+        _db.Users.Remove(userEntity);
+
+        _db.SaveChanges(); // changes in all of the db sets are commited to the database with Unit of Work
+
+        return new SuccessResult("User deleted successfully.");
+	}
+
+	// Way 2: a better way
+    public Result DeleteUser(int id)
+    {
+		// getting the user record joined with the user resources records
+        var userEntity = _db.Users.Include(u => u.UserResources).SingleOrDefault(u => u.Id == id);
+        if (userEntity is null)
+            return new ErrorResult("User not found!");
+			
+		// 1) deleting the relational user resource records:
+        _db.UserResources.RemoveRange(userEntity.UserResources);
+		
+		// 2) deleting the user record:
+        _db.Users.Remove(userEntity);
+		
+        _db.SaveChanges(); // changes in all of the db sets are commited to the database with Unit of Work
+		
+		return new SuccessResult("User deleted successfully.");
+	}
 }

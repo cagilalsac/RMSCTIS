@@ -184,12 +184,17 @@ namespace MVC.Controllers
         }
 
         // POST: Users/Delete
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+		// ActionName attribute (Delete) renames and overrides the action method name (DeleteConfirmed) 
+		// for the route so that it can be requested as not Users/DeleteConfirmed but as Users/Delete. 
+		[HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            // TODO: Add delete service logic here
-            return RedirectToAction(nameof(Index));
+            var result = _userService.DeleteUser(id);
+			
+			// carrying the service result message to the List view through GetList action
+            TempData["Message"] = result.Message;
+			 
+            return RedirectToAction(nameof(GetList));
         }
 	}
 }
