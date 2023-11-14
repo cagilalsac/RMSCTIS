@@ -1,5 +1,6 @@
 #nullable disable
 using Business;
+using Business.Models;
 using Business.Results.Bases;
 using Business.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
-	public class UsersController : Controller
+    public class UsersController : Controller
     {
         // Add service injections here
         #region User and Role Service Constructor Injections

@@ -1,4 +1,5 @@
-﻿using Business.Results;
+﻿using Business.Models;
+using Business.Results;
 using Business.Results.Bases;
 using DataAccess.Contexts;
 using DataAccess.Entities;
@@ -93,7 +94,7 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
             return new ErrorResult("User with the same user name already exists!");
 
         // entity creation from the model
-        User user = new User()
+        User userEntity = new User()
         {
             IsActive = model.IsActive,
             UserName = model.UserName.Trim(),
@@ -114,7 +115,7 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
 		};
 		
 		// adding entity to the related db set
-        _db.Users.Add(user);
+        _db.Users.Add(userEntity);
 		
 		// changes in all of the db sets are commited to the database with Unit of Work
         _db.SaveChanges(); 
@@ -135,24 +136,26 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
         if (existingUsers.Any(u => u.UserName.Equals(model.UserName.Trim(), StringComparison.OrdinalIgnoreCase)))
             return new ErrorResult("User with the same user name already exists!");
 
-        // first getting the entity to be updated from the db set
-        var user = _db.Users.SingleOrDefault(u => u.Id == model.Id);
+        // first getting the user entity to be updated from the db set
+        var userEntity = _db.Users.SingleOrDefault(u => u.Id == model.Id);
 
-        // then updating the entity properties
-        if (user is not null)
-        {
-            user.IsActive = model.IsActive;
-            user.UserName = model.UserName.Trim();
-            user.Password = model.Password.Trim();
-            user.RoleId = model.RoleId ?? 0;
-            user.Status = model.Status;
+        // then checking if the user entity exists
+        if (userEntity is null)
+            return new ErrorResult("User not found!");
 
-            // updating the entity in the related db set
-            _db.Users.Update(user);
+        // then updating the user entity properties
+        userEntity.IsActive = model.IsActive;
+        userEntity.UserName = model.UserName.Trim();
+        userEntity.Password = model.Password.Trim();
+        userEntity.RoleId = model.RoleId ?? 0;
+        userEntity.Status = model.Status;
 
-            // changes in all of the db sets are commited to the database with Unit of Work
-            _db.SaveChanges();
-        }
+        // updating the user entity in the related db set
+        _db.Users.Update(userEntity);
+
+        // changes in all of the db sets are commited to the database with Unit of Work
+        _db.SaveChanges();
+        
         return new SuccessResult("User updated successfully.");
     }
 

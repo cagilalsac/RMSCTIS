@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using DataAccess.Enums;
 
-namespace Business;
+namespace Business.Models;
 
 public class UserModel
 {

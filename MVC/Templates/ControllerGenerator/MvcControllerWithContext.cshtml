@@ -77,7 +77,7 @@ namespace @Model.ControllerNamespace
     var serviceInterfaceName = Model.ModelVariable + "Service";
     var constructorLine = "public " + Model.ControllerName + "(" + serviceInterfaceType + " " + serviceInterfaceName + ")";
     var modelType = Model.ModelTypeName + "Model";
-    var listLine = "List<" + modelType + "> " + Model.ModelVariable + "List = new List<" + modelType + ">"();";
+    var listLine = "List<" + modelType + "> " + Model.ModelVariable + "List = new List<" + modelType + ">();";
     var viewLine = "return View(" + Model.ModelVariable + "List);";
 }
     public class @Model.ControllerName : Controller

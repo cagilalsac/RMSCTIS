@@ -25,7 +25,8 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
                                                      // therefore we should provide the type of our class
                                                      // inherited from the DbContext as the generic type
                                                      // for AddDbContext method.
-    .UseMySQL("server=127.0.0.1;database=test;user id=std;password=;"));
+    //.UseMySQL("server=127.0.0.1;database=test;user id=std;password=;")); // // we are going to use Microsoft SQL Server LocalDB from now on
+    .UseSqlServer("server=(localdb)\\mssqllocaldb;database=RMSCTISDB;trusted_connection=true;")); // TODO
 
 // AddScoped: The object's reference (usually an interface or abstract class) is used to instantiate an object
 // through constructor injection when a request is received and the object lives until the response is returned.

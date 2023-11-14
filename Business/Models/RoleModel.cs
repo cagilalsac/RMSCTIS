@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using System.ComponentModel;
+
 namespace Business.Models
 {
 	public class RoleModel
@@ -8,6 +10,13 @@ namespace Business.Models
 		public int Id { get; set; } 
 
 		public string Name { get; set; }
-		#endregion
-	}
+        #endregion
+
+
+
+        #region Extra properties required for the views
+        [DisplayName("User Count")]
+        public int UserCountOutput { get; set; }
+        #endregion
+    }
 }
