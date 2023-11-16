@@ -184,3 +184,9 @@ in the Create or Edit views <partial name="_ValidationScriptsPartial" /> must be
 For delete operation, the get action returns the model data to the view to show the details. If the submit button 
 within the form is clicked, the hidden input for id value is sent to the delete operation's post action and catched by 
 id action parameter, then delete operation is performed through the related service by using the id value.
+
+7.8) The connection string of the database should be read from the appsettings.json file in the Program.cs file.
+Other application configuration data can also be read from appsettings.json file in the Program.cs file according 
+to the same section and class names including same properties. The application configuration class (AppSettings)
+can be found under the Settings folder of the MVC project. The static properties of this class can directly be reached
+using the class name (AppSettings) without initialization in the views and controller actions.

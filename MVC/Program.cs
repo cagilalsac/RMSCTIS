@@ -5,6 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region AppSettings
+// Application configuration settings can be read from sections such as AppSettings in the appsettings.json file.
+// Way 1:
+//var section = builder.Configuration.GetSection("AppSettings");
+// Way 2:
+var section = builder.Configuration.GetSection(nameof(MVC.Settings.AppSettings)); // only AppSettings class can also be used by
+                                                                                  // adding "using MVC.Settings;" directive
+section.Bind(new MVC.Settings.AppSettings()); // this method will fill the only one instance of type AppSettings with data in the
+                                              // AppSettings section of the appsettings.json file
+#endregion
+
 // Add services to the container.
 #region IoC (Inversion of Control) Container
 // IoC Container manages the initialization operations of the objects which are
@@ -26,7 +37,10 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
                                                      // inherited from the DbContext as the generic type
                                                      // for AddDbContext method.
     //.UseMySQL("server=127.0.0.1;database=test;user id=std;password=;")); // // we are going to use Microsoft SQL Server LocalDB from now on
-    .UseSqlServer("server=(localdb)\\mssqllocaldb;database=RMSCTISDB;trusted_connection=true;")); // TODO
+    //.UseSqlServer("server=(localdb)\\mssqllocaldb;database=RMSCTISDB;trusted_connection=true;"));
+    .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); // appsettings.json -> ConnectionString section
+    // Connection string should be read from the ConnectionString section of the appsettings.json file by using the
+    // connection string name (DefaultConnection).
 
 // AddScoped: The object's reference (usually an interface or abstract class) is used to instantiate an object
 // through constructor injection when a request is received and the object lives until the response is returned.

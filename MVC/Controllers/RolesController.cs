@@ -95,16 +95,12 @@ namespace MVC.Controllers
             return View(role);
         }
 
-        // TODO:
         // GET: Roles/Delete/5
         public IActionResult Delete(int id)
         {
-            RoleModel role = null; // TODO: Add get item service logic here
-            if (role == null)
-            {
-                return NotFound();
-            }
-            return View(role);
+            var result = _roleService.Delete(id);
+            TempData["Message"] = result.Message; // we must put TempData["Message"] in the Index view
+            return RedirectToAction(nameof(Index));
         }
 	}
 }

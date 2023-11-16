@@ -98,7 +98,23 @@ namespace Business.Services
 
         public Result Delete(int id)
         {
-            throw new NotImplementedException();
+			// getting the role entity with relational user entities by role id from the related database table
+            var existingEntity = _db.Roles.Include(r => r.Users).SingleOrDefault(r => r.Id == id);
+            if (existingEntity is null)
+                return new ErrorResult("Role not found!");
+
+			// checking if the role entity has relational users, if it has, we should not delete the role entity
+            // Way 1:
+            //if (existingEntity.Users.Count > 0)
+            //    return new ErrorResult("Role can't be deleted because it has users!");
+            // Way 2:
+            if (existingEntity.Users.Any())
+                return new ErrorResult("Role can't be deleted because it has users!");
+
+			// since there is no relational user entities of the role entity, we can delete it
+            _db.Roles.Remove(existingEntity);
+            _db.SaveChanges();
+            return new SuccessResult("Role deleted successfully.");
         }
     }
 }
