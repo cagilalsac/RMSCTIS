@@ -190,3 +190,15 @@ Other application configuration data can also be read from appsettings.json file
 to the same section and class names including same properties. The application configuration class (AppSettings)
 can be found under the Settings folder of the MVC project. The static properties of this class can directly be reached
 using the class name (AppSettings) without initialization in the views and controller actions.
+
+7.9) JavaScript and CSS libraries such as DataTables, AlertifyJS and Select2 can be added to the project 
+by right-clicking on wwwroot -> lib, selecting Add -> Client-Side Library. After clicking, a search for 
+the library can be performed and the relevant result can be selected. The correctness of the library, 
+including its name and version, can be verified on the library web site before adding it to the project.
+
+7.10) Whether using a client-side library or not, Javascript codes can be written in a view's "Scripts" section,
+which is also named as "Scripts" and rendered at the bottom of _Layout.cshtml view. Therefore, the Javascript codes
+can use the necessary client-side libraries such as jQuery since their file references are above the section
+that will be rendered by the RenderSectionAsync method. If the required parameter of this method is sent as true, 
+all views must have a Scripts section. However, we may generally not need a Scripts section in all views therefore
+this parameter should be sent as false.
