@@ -1,7 +1,8 @@
 ﻿#nullable disable
 
-using DataAccess.Enums; // since Statuses enum is under different folder therefore different namespace,
-                        // we need to include the namespace with using (similar to import in Java)
+using DataAccess.Enums;
+using System.ComponentModel.DataAnnotations; // since Statuses enum is under different folder therefore different namespace,
+                                             // we need to include the namespace with using (similar to import in Java)
 
 namespace DataAccess.Entities;
 
@@ -9,8 +10,12 @@ public class User
 {
     public int Id { get; set; }
 
+    [Required]
+    [StringLength(10)]
     public string UserName { get; set; }
 
+    [Required]
+    [StringLength(8)]
     public string Password { get; set; }
 
     public bool IsActive { get; set; } // boolean data type which can have the value of true or false

@@ -41,7 +41,7 @@ namespace Business.Services
         public Result Add(RoleModel model)
         {
             // Way 1: may cause problems for Turkish characters such as İ, i, I and ı
-            //if (_db.Roles.Any(r => r.Name.ToLower() == model.Name.ToLower().Trim()))
+            //if (_db.Roles.Any(r => r.Name.ToUpper() == model.Name.ToUpper().Trim()))
             //    return new ErrorResult("Role with the same name already exists!");
             // Way 2: one of the correct ways for checking string data without any problems for Turkish characters,
             // works correct for English culture,
@@ -49,7 +49,7 @@ namespace Business.Services
             var nameSqlParameter = new SqlParameter("name", model.Name.Trim()); // using a parameter prevents SQL Injection
             // we provide SQL parameters to the SQL query as the second and rest parameters for the FromSqlRaw method
             // according to their usage order in the SQL query
-            var query = _db.Roles.FromSqlRaw("select * from Roles where LOWER(Name) = LOWER(@name)", nameSqlParameter);
+            var query = _db.Roles.FromSqlRaw("select * from Roles where UPPER(Name) = UPPER(@name)", nameSqlParameter);
             if (query.Any()) // if there are any results for the query above
                 return new ErrorResult("Role with the same name already exists!");
 
@@ -65,7 +65,7 @@ namespace Business.Services
         public Result Update(RoleModel model)
         {
             // Way 1: may cause problems for Turkish characters such as İ, i, I and ı
-            //if (_db.Roles.Any(r => r.Name.ToLower() == model.Name.ToLower().Trim() && r.Id != model.Id))
+            //if (_db.Roles.Any(r => r.Name.ToUpper() == model.Name.ToUpper().Trim() && r.Id != model.Id))
             //    return new ErrorResult("Role with the same name already exists!");
             // Way 2: one of the correct ways for checking string data without any problems for Turkish characters,
             // works correct for English culture,
@@ -74,7 +74,7 @@ namespace Business.Services
             var idSqlParameter = new SqlParameter("id", model.Id);
             // we provide SQL parameters to the SQL query as the second and rest parameters for the FromSqlRaw method
             // according to their usage order in the SQL query
-            var query = _db.Roles.FromSqlRaw("select * from Roles where LOWER(Name) = LOWER(@name) and Id != @id", nameSqlParameter, idSqlParameter);
+            var query = _db.Roles.FromSqlRaw("select * from Roles where UPPER(Name) = UPPER(@name) and Id != @id", nameSqlParameter, idSqlParameter);
             if (query.Any()) // if there are any results for the query above
                 return new ErrorResult("Role with the same name already exists!");
 

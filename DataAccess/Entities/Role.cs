@@ -3,6 +3,8 @@
 // Way 1:
 // namespace DataAccess.Entities;
 // Way 2:
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Entities // namespace DataAccess.Entities; can also be written
                               // therefore we don't need to use curly braces
 {
@@ -25,6 +27,8 @@ namespace DataAccess.Entities // namespace DataAccess.Entities; can also be writ
 
         public int Id { get; set; } // this is called a property in C# which contains getters and setters 
 
+        [Required]
+        [StringLength(5, MinimumLength = 4)]
         public string Name { get; set; } // "String" class type can also be used, general usage "string" data type
 
         // class has a relationship for one to many tables relationship (Users table is the many side)

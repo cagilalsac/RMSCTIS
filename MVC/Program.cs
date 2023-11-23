@@ -1,9 +1,26 @@
 using Business;
 using Business.Services;
 using DataAccess.Contexts;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Localization
+List<CultureInfo> cultures = new List<CultureInfo>()
+{
+    new CultureInfo("en-US") // for Turkish, "tr-TR" constructor parameter must be used,
+                             // this will be our default culture for our MVC Web Application
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault().Name);
+    options.SupportedCultures = cultures;
+    options.SupportedUICultures = cultures;
+});
+#endregion
 
 #region AppSettings
 // Application configuration settings can be read from sections such as AppSettings in the appsettings.json file.
@@ -60,11 +77,22 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IResourceService, ResourceService>();
 #endregion
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+#region Localization
+app.UseRequestLocalization(new RequestLocalizationOptions()
+{
+    DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault().Name),
+    SupportedCultures = cultures,
+    SupportedUICultures = cultures
+});
+#endregion
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

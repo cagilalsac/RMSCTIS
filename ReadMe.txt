@@ -202,3 +202,7 @@ can use the necessary client-side libraries such as jQuery since their file refe
 that will be rendered by the RenderSectionAsync method. If the required parameter of this method is sent as true, 
 all views must have a Scripts section. However, we may generally not need a Scripts section in all views therefore
 this parameter should be sent as false.
+
+7.11) MVC Web Application's default culture (for example English or Turkish) configuration can be made in the 
+Localization regions in the MVC project's Program.cs file. If implemented, we won't need to use an instance of 
+CultureInfo when formatting decimal or date time values to string anymore.

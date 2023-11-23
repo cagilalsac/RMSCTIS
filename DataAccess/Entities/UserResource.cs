@@ -13,14 +13,16 @@ public class UserResource // many to many tables relationship relational entity
     // properties, fields, behaviors or classes by the implementation of Aspect Oriented Programming.
     // Tables many to many relationship.
     [Key] // Primary key data annotation for Entity Framework
-    [Column(Order = 0)] // The order of the composite primary keys through the indices data annotation, 0: first primary key
+    //[Column(Order = 0)] // The order of the composite primary keys through the indices data annotation, 0: first primary key,
+                          // no need to use anymore
     public int UserId { get; set; }
 
     // class has a relationship for many to many tables relationship (Users table is the one side)
     public User User { get; set; }
 
     [Key] // Primary key data annotation for Entity Framework
-    [Column(Order = 1)] // The order of the composite primary keys through the indices data annotation, 1: second primary key
+    //[Column(Order = 1)] // The order of the composite primary keys through the indices data annotation, 1: second primary key,
+                          // no need to use anymore
     public int ResourceId { get; set; }
 
     // class has a relationship for many to many tables relationship (Resources table is the one side)

@@ -30,7 +30,7 @@ public class UserModel
     // Way 3:
     //[StringLength(10, MinimumLength = 3)] // the UserName input can be minimum 3 and maximum 10 characters
     // Way 4: overriding default validation message
-    [StringLength(10, MinimumLength = 3, ErrorMessage = "{0} must be minimum {2} maximum {1} characters!")]
+    //[StringLength(10, MinimumLength = 3, ErrorMessage = "{0} must be minimum {2} maximum {1} characters!")]
     // Way 5:
     [MinLength(3, ErrorMessage = "{0} must be minimum {1} characters!")]
     [MaxLength(10, ErrorMessage = "{0} must be maximum {1} characters!")]
