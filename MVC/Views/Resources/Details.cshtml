@@ -3,7 +3,7 @@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Resource Details";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -25,17 +25,18 @@
             @Html.DisplayFor(model => model.Content)
         </dd>
         <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Score)
+            @Html.DisplayNameFor(model => model.ScoreOutput)
         </dt>
         <dd class="col-10">
-            @Html.DisplayFor(model => model.Score)
+            @Html.DisplayFor(model => model.ScoreOutput)
         </dd>
         <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.DateOutput)
         </dt>
         <dd class="col-10">
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.DateOutput)
         </dd>
+        @* TODO: User list *@
     </dl>
 </div>
 <div>

@@ -31,6 +31,7 @@ namespace Business.Services
 
         public IQueryable<ResourceModel> Query()
         {
+            // TODO: Users count (UserCountOutput)
             return _db.Resources.Select(r => new ResourceModel()
             {
                 Content = r.Content,
@@ -54,6 +55,7 @@ namespace Business.Services
 
         public Result Add(ResourceModel model)
         {
+            // TODO: UserResources relation
             // we want to check whether a resource with the same title exists for the same date without time
             // therefore we use the Date property of DateTime type which is returned by the GetValueOrDefault method,
             // this method can be used with nullable DateTime type which returns the DateTime value
@@ -83,6 +85,7 @@ namespace Business.Services
 
         public Result Update(ResourceModel model)
         {
+            // TODO: UserResources relation
             if (_db.Resources.Any(r => r.Date.GetValueOrDefault().Date == model.Date.GetValueOrDefault().Date &&
                r.Title.ToUpper() == model.Title.ToUpper().Trim() && r.Id != model.Id))
                 return new ErrorResult("Resource with the same title and date exists!");

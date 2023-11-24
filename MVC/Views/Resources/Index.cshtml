@@ -3,14 +3,23 @@
 @*Model namespace using directive should be added to _ViewImports.cshtml.*@
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Resource List";
 }
 
 <h1>@ViewData["Title"]</h1>
 
+@if (TempData["Message"] is not null)
+{
+	<p class="bg-warning text-dark">@TempData["Message"]</p>
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<p class="bg-info text-black">@Model.Count() resource(s) found.</p>
+
+@* TODO: DataTables*@
 <table class="table">
     <thead>
         <tr>
@@ -18,15 +27,13 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                @Html.DisplayNameFor(model => model.ScoreOutput)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Score)
+                @Html.DisplayNameFor(model => model.DateOutput)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th></th>
+			@* TODO: Users count (UserCountOutput)*@
+			<th></th>
         </tr>
     </thead>
     <tbody>
@@ -36,18 +43,16 @@
 						@Html.DisplayFor(modelItem => item.Title)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Content)
+						@Html.DisplayFor(modelItem => item.ScoreOutput)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Score)
+						@Html.DisplayFor(modelItem => item.DateOutput)
 					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Date)
-					</td>
+					@* TODO: Users count (UserCountOutput)*@
 					<td>
 						<a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
 						<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
-						<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+						@* TODO: AlertifyJS *@
 					</td>
 				</tr>
 		}

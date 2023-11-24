@@ -33,10 +33,11 @@ namespace MVC.Controllers
         // GET: Resources/Details/5
         public IActionResult Details(int id)
         {
-            ResourceModel resource = null; // TODO: Add get item service logic here
+            // TODO: Resource service GetItem method
+            ResourceModel resource = null;
             if (resource == null)
             {
-                return NotFound();
+                // TODO: Error partial view
             }
             return View(resource);
         }
@@ -44,7 +45,7 @@ namespace MVC.Controllers
         // GET: Resources/Create
         public IActionResult Create()
         {
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: User list ViewBag
             return View();
         }
 
@@ -57,23 +58,29 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO: Add insert service logic here
-                return RedirectToAction(nameof(Index));
+                var result = _resourceService.Add(resource);
+                if (result.IsSuccessful)
+                {
+					TempData["Message"] = result.Message;
+					return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("", result.Message);
             }
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            return View(resource);
+			// TODO: User list ViewBag
+			return View(resource);
         }
 
         // GET: Resources/Edit/5
         public IActionResult Edit(int id)
         {
-            ResourceModel resource = null; // TODO: Add get item service logic here
+			// TODO: Resource service GetItem method
+			ResourceModel resource = null;
             if (resource == null)
             {
-                return NotFound();
-            }
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            return View(resource);
+				// TODO: Error partial view
+			}
+			// TODO: User list ViewBag
+			return View(resource);
         }
 
         // POST: Resources/Edit
@@ -85,31 +92,24 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO: Add update service logic here
-                return RedirectToAction(nameof(Index));
+                var result = _resourceService.Update(resource);
+                if (result.IsSuccessful)
+                {
+					TempData["Message"] = result.Message;
+					// TODO: redirect to details
+				}
+                ModelState.AddModelError("", result.Message);
             }
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
-            return View(resource);
+			// TODO: User list ViewBag
+			return View(resource);
         }
 
         // GET: Resources/Delete/5
         public IActionResult Delete(int id)
         {
-            ResourceModel resource = null; // TODO: Add get item service logic here
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            return View(resource);
-        }
-
-        // POST: Resources/Delete
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            // TODO: Add delete service logic here
-            return RedirectToAction(nameof(Index));
-        }
-	}
+            var result = _resourceService.Delete(id);
+			TempData["Message"] = result.Message;
+			return RedirectToAction(nameof(Index));
+		}
+    }
 }
