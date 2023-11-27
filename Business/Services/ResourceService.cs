@@ -18,7 +18,8 @@ namespace Business.Services
         // extra method definitions can be added to use in the related controller and
         // to implement to the related classes
         List<ResourceModel> GetList();
-    }
+        ResourceModel GetItem(int id);
+	}
 
     public class ResourceService : IResourceService
     {
@@ -31,8 +32,7 @@ namespace Business.Services
 
         public IQueryable<ResourceModel> Query()
         {
-            // TODO: Users count (UserCountOutput)
-            return _db.Resources.Select(r => new ResourceModel()
+            return _db.Resources.Include(r => r.UserResources).Select(r => new ResourceModel()
             {
                 Content = r.Content,
                 Date = r.Date,
@@ -47,20 +47,26 @@ namespace Business.Services
                 ScoreOutput = r.Score.ToString("N1"), 
                 // N: number format, 1: one decimal after decimal point
 
-                DateOutput = r.Date.HasValue ? r.Date.Value.ToString("MM/dd/yyyy hh:mm:ss") : ""
+                DateOutput = r.Date.HasValue ? r.Date.Value.ToString("MM/dd/yyyy hh:mm:ss") : "",
                 // MM: 2 digits month, dd: 2 digits day, yyyy: 4 digits year,
                 // hh: 12 hour with AM and PM, mm: 2 digits minute, ss: 2 digits second
+
+                UserCountOutput = r.UserResources.Count,
+
+                // querying over many to many relationship
+                UserNamesOutput = string.Join("<br />", r.UserResources.Select(ur => ur.User.UserName))
             }).OrderByDescending(r => r.Date).ThenByDescending(r => r.Score);
         }
 
         public Result Add(ResourceModel model)
         {
-            // TODO: UserResources relation
             // we want to check whether a resource with the same title exists for the same date without time
-            // therefore we use the Date property of DateTime type which is returned by the GetValueOrDefault method,
-            // this method can be used with nullable DateTime type which returns the DateTime value
-            // or the default value (01/01/0001 00:00:00.000) if the value is null 
-            if (_db.Resources.Any(r => r.Date.GetValueOrDefault().Date == model.Date.GetValueOrDefault().Date &&
+            // therefore we use the Date property of DateTime type,
+            // for entity's delegate of type Resource (r), we create a new DateTime with default value
+            // "01/01/0001 00:00:00.000" if its value is null
+            // and check the delegate's Date property value is equal to the model's Date property value
+            if (model.Date.HasValue && 
+                _db.Resources.Any(r => (r.Date ?? new DateTime()).Date == model.Date.Value.Date &&
                 r.Title.ToUpper() == model.Title.ToUpper().Trim()))
                 return new ErrorResult("Resource with the same title and date exists!");
 
@@ -73,8 +79,14 @@ namespace Business.Services
                 
                 Date = model.Date,
                 Score = model.Score,
-                Title = model.Title.Trim() // since Title is required in the model, therefore can't be null,
-                                           // we don't need to use ?
+                Title = model.Title.Trim(), // since Title is required in the model, therefore can't be null,
+                                            // we don't need to use ?
+
+                // inserting many to many relational entity
+                UserResources = model.UserIdsInput.Select(userId => new UserResource()
+                {
+                    UserId = userId
+                }).ToList()
             };
 
             _db.Resources.Add(entity);
@@ -85,20 +97,34 @@ namespace Business.Services
 
         public Result Update(ResourceModel model)
         {
-            // TODO: UserResources relation
-            if (_db.Resources.Any(r => r.Date.GetValueOrDefault().Date == model.Date.GetValueOrDefault().Date &&
-               r.Title.ToUpper() == model.Title.ToUpper().Trim() && r.Id != model.Id))
+            if (model.Date.HasValue &&
+                _db.Resources.Any(r => (r.Date ?? new DateTime()).Date == model.Date.Value.Date &&
+                r.Title.ToUpper() == model.Title.ToUpper().Trim() && r.Id != model.Id))
                 return new ErrorResult("Resource with the same title and date exists!");
+
+            // deleting many to many relational entity
+            var existingEntity = _db.Resources.Include(r => r.UserResources).SingleOrDefault(r => r.Id == model.Id);
+            if (existingEntity is not null && existingEntity.UserResources is not null)
+                _db.UserResources.RemoveRange(existingEntity.UserResources);
+
             var entity = new Resource()
             {
                 Id = model.Id, // must be set for update
                 Content = model.Content?.Trim(),
                 Date = model.Date,
                 Score = model.Score,
-                Title = model.Title.Trim()
-            };
+                Title = model.Title.Trim(),
+
+				// inserting many to many relational entity
+				UserResources = model.UserIdsInput.Select(userId => new UserResource()
+				{
+					UserId = userId
+				}).ToList()
+			};
+
             _db.Resources.Update(entity);
-            _db.SaveChanges();
+            _db.SaveChanges(); // changes in all DbSets are commited to the database by Unit of Work
+
             return new SuccessResult("Resource updated successfully.");
         }
 
@@ -108,6 +134,7 @@ namespace Business.Services
             if (entity is null)
                 return new ErrorResult("Resource not found!");
 
+            // deleting many to many relational entity:
             // deleting relational UserResource entities of the resource entity first
             _db.UserResources.RemoveRange(entity.UserResources);
 
@@ -125,5 +152,13 @@ namespace Business.Services
             // and return the result as a list by calling ToList method
             return Query().ToList();
         }
+
+        // Way 1:
+        //public ResourceModel GetItem(int id)
+        //{
+        //    return Query().SingleOrDefault(r => r.Id == id);
+        //}
+        // Way 2:
+        public ResourceModel GetItem(int id) => Query().SingleOrDefault(r => r.Id == id);
     }
 }

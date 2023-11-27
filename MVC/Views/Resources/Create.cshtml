@@ -12,7 +12,10 @@
 <hr />
 <div class="row">
     <div class="col-12">
-        <form asp-action="Create">
+
+		<!-- autocomplete="off" HTML attribute can be used for preventing browser's cached data used in the form -->
+        <form asp-action="Create" autocomplete="off">
+
 		@Html.AntiForgeryToken()
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="row mb-3">
@@ -25,7 +28,7 @@
             <div class="row mb-3">
                 <label asp-for="Content" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					@* TODO: textarea *@
+					<textarea asp-for="Content" class="form-control" rows="4"></textarea>
 					<span asp-validation-for="Content" class="text-danger"></span>
 				</div>
             </div>
@@ -39,11 +42,29 @@
             <div class="row mb-3">
                 <label asp-for="Date" class="col-2 col-form-label"></label>
 				<div class="col-5">
-					@* TODO: calendar *@
+
+					@* we added datetimepicker CSS class to convert the text box to jQuery DateTimePicker *@
+					<input asp-for="Date" class="form-control datetimepicker" type="text" />
+
 					<span asp-validation-for="Date" class="text-danger"></span>
 				</div>
             </div>
-			@* TODO: Users selection *@
+
+			@* managing many to many relationship *@
+			<div class="row mb-3">
+				<label asp-for="UserIdsInput" class="col-2 col-form-label"></label>
+				<div class="col-5">
+
+					@* 
+						since the application user may select many users, 
+						we created a list box by using multiple HTML attribute 
+					*@
+					<select multiple asp-for="UserIdsInput" class="form-select" asp-items="ViewBag.UserId"></select>
+					
+					<span asp-validation-for="UserIdsInput" class="text-danger"></span>
+				</div>
+			</div>
+
             <div class="row mb-3">
 				<div class="offset-2 col-5">
 					<input type="submit" value="Save" class="btn btn-primary" />
@@ -57,6 +78,23 @@
     </div>
 </div>
 
+@section Scripts {
+	@* https://xdsoft.net/jqplugins/datetimepicker/ *@
+    <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.min.js"></script>
 
+	<script>
+		$(function () { // after the HTML DOM is loaded
+			// convert the input with class datetimepicker to jQuery DateTimePicker
+			// Way 1:
+			// $(".datetimepicker").datetimepicker();
+			// Way 2:
+			$(".datetimepicker").datetimepicker({
+				format: 'm/d/Y H:i:s', // month/day/year hour:minute:second format
+				timepicker: true // show the time component
+			})
+		});
+	</script>
+}
 
 

@@ -1,7 +1,9 @@
 ﻿#nullable disable
+using Business;
 using Business.Models;
 using Business.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 //Generated from Custom Template.
@@ -9,16 +11,17 @@ namespace MVC.Controllers
 {
     public class ResourcesController : Controller
     {
-        // TODO: Add service injections here
         private readonly IResourceService _resourceService;
+        private readonly IUserService _userService;
 
-        public ResourcesController(IResourceService resourceService)
-        {
-            _resourceService = resourceService;
-        }
+		public ResourcesController(IResourceService resourceService, IUserService userService)
+		{
+			_resourceService = resourceService;
+			_userService = userService;
+		}
 
-        // GET: Resources
-        public IActionResult Index()
+		// GET: Resources
+		public IActionResult Index()
         {
             // Way 1:
             //List<ResourceModel> resourceList = _resourceService.Query().ToList();
@@ -33,11 +36,16 @@ namespace MVC.Controllers
         // GET: Resources/Details/5
         public IActionResult Details(int id)
         {
-            // TODO: Resource service GetItem method
-            ResourceModel resource = null;
+            // since we implemented the GetItem method in the service class
+            // and defined it in the service interface to return the item of type ResourceModel,
+            // from now on we should use it for getting one resource item operations
+            ResourceModel resource = _resourceService.GetItem(id);
             if (resource == null)
             {
-                // TODO: Error partial view
+                // instead of returning 404 Not Found HTTP Status Code,
+                // we send the message as model to the _Error partial view
+                // which is created under ~/Views/Shared folder
+                return View("_Error", "Resource not found!");
             }
             return View(resource);
         }
@@ -45,7 +53,9 @@ namespace MVC.Controllers
         // GET: Resources/Create
         public IActionResult Create()
         {
-            // TODO: User list ViewBag
+            // SelectList must be used for drop down list (select HTML tag),
+            // MultiSelectList must be used for list box (select HTML tag with multiple HTML attribute)
+            ViewBag.UserId = new MultiSelectList(_userService.Query().ToList(), "Id", "UserName");
             return View();
         }
 

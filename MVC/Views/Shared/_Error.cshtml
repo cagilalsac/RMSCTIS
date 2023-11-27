@@ -1,0 +1,20 @@
+﻿@* other types such as string can be used as a view's model type *@
+@model string
+
+@{
+    ViewData["Title"] = "Error!";
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+
+@* if Model is null or model is "" (empty string) by trimming white space characters *@
+@if (string.IsNullOrWhiteSpace(Model))
+{
+    @* writing a general message *@
+    <h2 class="text-danger">An error occurred while processing your request.</h2>
+}
+else
+{
+    @* writing model's data of type string *@
+    <h2 class="text-danger">@Model</h2>
+}

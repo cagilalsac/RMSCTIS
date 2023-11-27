@@ -36,7 +36,18 @@
         <dd class="col-10">
             @Html.DisplayFor(model => model.DateOutput)
         </dd>
-        @* TODO: User list *@
+        
+        @* 
+            managing many to many relationship:
+            getting UserNames of User from the relational Resource through UserResources
+        *@
+        <dt class="col-2">
+            @Html.DisplayNameFor(r => r.UserNamesOutput)
+        </dt>
+        <dd class="col-10">
+            @Html.Raw(Model.UserNamesOutput)
+        </dd>
+
     </dl>
 </div>
 <div>
