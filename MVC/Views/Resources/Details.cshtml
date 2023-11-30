@@ -8,6 +8,11 @@
 
 <h1>@ViewData["Title"]</h1>
 
+@if (TempData["Message"] is not null)
+{
+    <p class="bg-info text-dark">@TempData["Message"]</p>
+}
+
 <div>
     <h4>Resource</h4>
     <hr />

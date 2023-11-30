@@ -13,6 +13,10 @@
     {
       "library": "jquery-datetimepicker@2.5.20",
       "destination": "wwwroot/lib/jquery-datetimepicker/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/"
     }
   ]
 }

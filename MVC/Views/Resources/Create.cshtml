@@ -59,7 +59,7 @@
 						since the application user may select many users, 
 						we created a list box by using multiple HTML attribute 
 					*@
-					<select multiple asp-for="UserIdsInput" class="form-select" asp-items="ViewBag.UserId"></select>
+					<select multiple asp-for="UserIdsInput" class="form-select select2" asp-items="ViewBag.UserId"></select>
 					
 					<span asp-validation-for="UserIdsInput" class="text-danger"></span>
 				</div>
@@ -83,16 +83,23 @@
     <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
     <script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.min.js"></script>
 
+	@* https://select2.org/ *@
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/lib/select2/js/select2.min.js"></script>
+
 	<script>
 		$(function () { // after the HTML DOM is loaded
-			// convert the input with class datetimepicker to jQuery DateTimePicker
+			// convert the input with class datetimepicker to JS-CSS jQuery DateTimePicker
 			// Way 1:
 			// $(".datetimepicker").datetimepicker();
 			// Way 2:
 			$(".datetimepicker").datetimepicker({
 				format: 'm/d/Y H:i:s', // month/day/year hour:minute:second format
 				timepicker: true // show the time component
-			})
+			});
+
+			// convert the select with class select2 to JS-CSS Select2
+			$(".select2").select2();
 		});
 	</script>
 }

@@ -54,7 +54,8 @@ namespace Business.Services
                 UserCountOutput = r.UserResources.Count,
 
                 // querying over many to many relationship
-                UserNamesOutput = string.Join("<br />", r.UserResources.Select(ur => ur.User.UserName))
+                UserNamesOutput = string.Join("<br />", r.UserResources.Select(ur => ur.User.UserName)), // to show user names in details operation
+                UserIdsInput = r.UserResources.Select(ur => ur.UserId).ToList() // to set selected UserIds in edit operation
             }).OrderByDescending(r => r.Date).ThenByDescending(r => r.Score);
         }
 
@@ -78,12 +79,13 @@ namespace Business.Services
                 Content = model.Content?.Trim(),
                 
                 Date = model.Date,
-                Score = model.Score,
+                Score = model.Score ?? 0,
                 Title = model.Title.Trim(), // since Title is required in the model, therefore can't be null,
                                             // we don't need to use ?
 
-                // inserting many to many relational entity
-                UserResources = model.UserIdsInput.Select(userId => new UserResource()
+                // inserting many to many relational entity,
+				// ? must be used with UserIdsInput if there is a possibility that it can be null
+                UserResources = model.UserIdsInput?.Select(userId => new UserResource()
                 {
                     UserId = userId
                 }).ToList()
@@ -107,22 +109,22 @@ namespace Business.Services
             if (existingEntity is not null && existingEntity.UserResources is not null)
                 _db.UserResources.RemoveRange(existingEntity.UserResources);
 
-            var entity = new Resource()
+			// existingEntity queried from the database must be updated since we got the existingEntity
+			// first as above, therefore changes of the existing entity are being tracked by Entity Framework,
+			// if disabling of change tracking is required, AsNoTracking method must be used after the DbSet,
+			// for example _db.Resources.AsNoTracking()
+            existingEntity.Content = model.Content?.Trim();
+            existingEntity.Date = model.Date;
+            existingEntity.Score = model.Score ?? 0;
+            existingEntity.Title = model.Title.Trim();
+
+            // inserting many to many relational entity
+            existingEntity.UserResources = model.UserIdsInput?.Select(userId => new UserResource()
             {
-                Id = model.Id, // must be set for update
-                Content = model.Content?.Trim(),
-                Date = model.Date,
-                Score = model.Score,
-                Title = model.Title.Trim(),
+                UserId = userId
+            }).ToList();
 
-				// inserting many to many relational entity
-				UserResources = model.UserIdsInput.Select(userId => new UserResource()
-				{
-					UserId = userId
-				}).ToList()
-			};
-
-            _db.Resources.Update(entity);
+            _db.Resources.Update(existingEntity);
             _db.SaveChanges(); // changes in all DbSets are commited to the database by Unit of Work
 
             return new SuccessResult("Resource updated successfully.");

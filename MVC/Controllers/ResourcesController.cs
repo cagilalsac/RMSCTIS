@@ -76,20 +76,19 @@ namespace MVC.Controllers
                 }
                 ModelState.AddModelError("", result.Message);
             }
-			// TODO: User list ViewBag
+			ViewBag.UserId = new MultiSelectList(_userService.Query().ToList(), "Id", "UserName");
 			return View(resource);
         }
 
         // GET: Resources/Edit/5
         public IActionResult Edit(int id)
         {
-			// TODO: Resource service GetItem method
-			ResourceModel resource = null;
+            ResourceModel resource = _resourceService.GetItem(id);
             if (resource == null)
             {
-				// TODO: Error partial view
+                return View("_Error", "Resource not found!");
 			}
-			// TODO: User list ViewBag
+			ViewBag.UserId = new MultiSelectList(_userService.Query().ToList(), "Id", "UserName");
 			return View(resource);
         }
 
@@ -106,11 +105,14 @@ namespace MVC.Controllers
                 if (result.IsSuccessful)
                 {
 					TempData["Message"] = result.Message;
-					// TODO: redirect to details
+                    // Way 1: 
+                    //return RedirectToAction(nameof(Index));
+                    // Way 2: redirection with route values
+                    return RedirectToAction(nameof(Details), new { id = resource.Id });
 				}
                 ModelState.AddModelError("", result.Message);
             }
-			// TODO: User list ViewBag
+			ViewBag.UserId = new MultiSelectList(_userService.Query().ToList(), "Id", "UserName");
 			return View(resource);
         }
 

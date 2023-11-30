@@ -14,9 +14,13 @@ namespace Business.Models
         [StringLength(50, ErrorMessage = "{0} must be maximum {1} characters!")]
         public string Title { get; set; }
 
-        public string Content { get; set; } 
+        public string Content { get; set; }
 
-        public decimal Score { get; set; } 
+		// if we use decimal, model validation will show the result "The value '' is invalid." for this property,
+		// if we use decimal? with Required, model validation will show the result "Score is required!"
+		//public decimal Score { get; set; } 
+        [Required(ErrorMessage = "{0} is required!")]
+        public decimal? Score { get; set; } 
         
         public DateTime? Date { get; set; }
         #endregion
@@ -34,6 +38,7 @@ namespace Business.Models
 		public int UserCountOutput { get; set; }
 
         [DisplayName("Users")]
+        //[Required(ErrorMessage = "{0} must be selected!")] // if users must be selected, uncomment this line
         public List<int> UserIdsInput { get; set; }
 
         [DisplayName("Users")]
