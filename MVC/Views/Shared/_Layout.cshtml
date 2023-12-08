@@ -42,13 +42,57 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="GetList">User List</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Role List</a>
-                        </li>
+
+			@* 
+			    application user's role name can be checked by the User object's IsInRole method,
+			    this method also checks whether the application user is authenticated or not,
+			    display "Role List" link for only application users with role "admin"
+			*@
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Role List</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Resources" asp-action="Index">Resource List</a>
                         </li>
                     </ul>
+
+                    <div class="navbar-text">
+                        <ul class="navbar-nav me-auto">
+			
+			     @* 
+        			application user's authentication cookie can be checked by the User object's Identity property reference's 
+    				IsAuthenticated boolean property,
+				application user's user name in the authentication cookie can be used by User object's Identity property
+	    			reference's Name string property
+    			    *@
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item pt-2">@* pt-2 Bootstrap class: padding top 2 units *@
+                                    <span class="badge bg-info text-black">@User.Identity.Name</span>
+                                </li>
+				
+				@* writing (escaping) text in Razor C# code: *@
+                                @* Way 1: *@
+                                @* <text>&nbsp;&nbsp;</text> *@
+                                @* Way 2: *@
+                                @:&nbsp;&nbsp;
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

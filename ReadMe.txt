@@ -206,3 +206,20 @@ this parameter should be sent as false.
 7.11) MVC Web Application's default culture (for example English or Turkish) configuration can be made in the 
 Localization regions in the MVC project's Program.cs file. If implemented, we won't need to use an instance of 
 CultureInfo when formatting decimal or date time values to string anymore.
+
+7.12) In general, cookie authentication is used in MVC Web Applications by creating a list of user claims,
+which include non-critical user data such as user name for displaying and user role for authorization,
+then the data in the claim list is hashed and sent to the client as an authentication cookie.
+For each request, the authentication cookie is also sent to the server and the hashed user data in the cookie
+is used in necessarry controllers, actions and views. In the Program.cs file of the MVC layer, authentication
+configuration should be made as written in the Authentication regions.
+
+7.13) In controllers, authentication cookie can be checked by the "Authorize" attribute. It can either be written
+above the controller to work for all actions or above specific actions. "Authorize" attribute checks whether the 
+authentication cookie exists or not. It can be used for role checking such as "[Authorize(Roles = "admin")]" or
+"[Authorize(Roles = "admin,user")]" for multiple roles.
+
+7.14) In controller actions and views, "User" object can be used to get the authenticated user information
+through the authentication cookie. "User.Identity.IsAuthenticated" checks whether the authentication cookie
+exists or not, "User.Identity.Name" returns the authenticated user's user name and "User.IsInRole(roleName)" 
+method checks whether the authenticated user has the specified role name sent as parameter.

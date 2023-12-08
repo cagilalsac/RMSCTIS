@@ -3,5 +3,22 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to @AppSettings.AppTitle</h1>
+
+    @* 
+        application user's authentication cookie can be checked by the User object's Identity property reference's 
+    	IsAuthenticated boolean property 
+    *@
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h1 class="display-4">Welcome to @AppSettings.AppTitle</h1>
+    }
+    else
+    {
+    	@*
+	    application user's user name in the authentication cookie can be used by User object's Identity property
+	    reference's Name string property
+	*@
+        <h1 class="display-4">Welcome to @AppSettings.AppTitle <b>@User.Identity.Name</b></h1>
+    }
+    
 </div>

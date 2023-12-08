@@ -1,11 +1,15 @@
 ﻿#nullable disable
 using Business.Models;
 using Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
+	// all of the controller actions can be executed for only logged in application users, 
+	// who have an authentication cookie, with role name "admin"
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         // Add service injections here

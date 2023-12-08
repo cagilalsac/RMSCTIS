@@ -5,6 +5,7 @@ using Business.Results.Bases;
 using Business.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
@@ -29,7 +30,13 @@ namespace MVC.Controllers
 		}
 		#endregion
 
-		// GET: Users/GetList
+        // GET: Users/GetList
+        // Way 1: GetList action will execute for only authenticated (logged in) application users 
+		// with role names "admin" or "user"
+        //[Authorize(Roles = "admin,user")]
+        // Way 2: since we have only 2 roles and want this action to execute for both of them, 
+		// we can use Authorize attribute to check application user's authentication cookie
+        [Authorize]
 		public IActionResult GetList()
         {
             // A query is executed and the result is stored in the collection
@@ -44,6 +51,8 @@ namespace MVC.Controllers
 
         // Returning user list in JSON format:
         // GET: Users/GetListJson
+        [Authorize(Roles = "admin")] // GetListJson action will execute for only authenticated (logged in) 
+								     // application users with role name "admin" 
         public JsonResult GetListJson()
         {
             var userList = _userService.Query().ToList();
@@ -204,13 +213,24 @@ namespace MVC.Controllers
 
 
         #region User Authentication
+        // ~/Users/Login // we could invoke this action by calling https://exampledomain.com/Users/Login like other actions above
+        // Way 1: we can change the route so that we can call this action by https://exampledomain.com/Account/Login
+		//[Route("Account/Login")]
+		// Way 2: we can use the action name by writing {action} and controller name by writing {controller}
+        //[Route("Account/{action}")]
+		// Way 3: we can also change the route template in the HttpGet action method
+        [HttpGet("Account/{action}")]
         public IActionResult Login()
         {
             return View(); // returning the Login view to the user for entering the user name and password
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Login(UserModel user)
+		// Way 1: changing the route by using Route attribute
+        //[Route("Account/{action}")]
+		// Way 2: changing the route by using the HttpPost action method
+        [HttpPost("Account/{action}")] 
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserModel user)
         {
             // checking the active user from the database table by the user name and password
             var existingUser = _userService.Query().SingleOrDefault(u => u.UserName == user.UserName && u.Password == user.Password && u.IsActive);
@@ -237,10 +257,34 @@ namespace MVC.Controllers
             var userPrincipal = new ClaimsPrincipal(userIdentity);
 
             // signing the user in to the MVC web application and returning the hashed authentication cookie to the client
-            HttpContext.SignInAsync(userPrincipal);
+            await HttpContext.SignInAsync(userPrincipal);
+			// Methods ending with "Async" should be used with the "await" (asynchronous wait) operator therefore
+			// the execution of the task run by the asynchronous method can be waited to complete and the
+			// result of the method can be used. If the "await" operator is used in a method, the method definition
+			// must be changed by adding "async" keyword before the return type and the return type must be written 
+			// in "Task". If the method is void, only "Task" should be written.
             
             // redirecting user to the home page
-            return RedirectToAction("Home", "Index");
+            return RedirectToAction("Index", "Home");
+        }
+
+		// ~/Account/Logout
+        [HttpGet("Account/{action}")]
+        public async Task<IActionResult> Logout()
+        {
+			// signing out the user by removing the authentication cookie from the client
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			
+			// redirecting user to the home page
+            return RedirectToAction("Index", "Home");
+        }
+
+		// ~/Account/AccessDenied
+        [HttpGet("Account/{action}")]
+        public IActionResult AccessDenied()
+        {
+			// returning the partial view "_Error" by sending the message of type string as model
+            return View("_Error", "You don't have access to this operation!");
         }
         #endregion
     }
