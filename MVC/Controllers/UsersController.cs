@@ -3,6 +3,7 @@ using Business;
 using Business.Models;
 using Business.Results.Bases;
 using Business.Services;
+using DataAccess.Enums;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -60,6 +61,7 @@ namespace MVC.Controllers
         }
 
         // GET: Users/Details/5
+        [Authorize(Roles = "admin")]
         public IActionResult Details(int id)
         {
             // Way 1:
@@ -91,6 +93,7 @@ namespace MVC.Controllers
         }
 
         // GET: Users/Create
+        // GET: Register: custom conventional route named register defined in Program.cs
         [HttpGet] // action method which is get by default when not written
         public IActionResult Create()
         {
@@ -118,12 +121,26 @@ namespace MVC.Controllers
         // Way 2:
         public IActionResult Create(UserModel user) // since UserModel has properties for above parameters, it should be used as action parameter
         {
+            if (!User.Identity.IsAuthenticated || !User.IsInRole("admin")) // setting default user model values for registering new users operation
+            {
+                user.Status = Statuses.Junior;
+                user.IsActive = true;
+                user.RoleId = (int)Roles.User;
+
+                ModelState.Remove(nameof(user.RoleId)); // if required like here, some model properties can be removed from the ModelState validation
+            }
+            // if user is authenticated and user is in admin role, create a new user from the values of all inputs from the Create view
+
             if (ModelState.IsValid) // validates the user action parameter (model) through data annotations above its properties
             {
                 // If model data is valid, insert service logic should be written here.
                 Result result = _userService.Add(user); // result referenced object can be of type SuccessResult or ErrorResult
                 if (result.IsSuccessful)
                 {
+                    if (!User.Identity.IsAuthenticated || !User.IsInRole("admin")) // if register operation is successful, redirect to the "Account/Login" route
+                        return Redirect("Account/Login"); // custom route redirection
+
+                    // if create operation of admin is successful, redirect to the user list
                     // Way 1:
                     //return RedirectToAction("GetList");
                     // Way 2:
@@ -150,6 +167,7 @@ namespace MVC.Controllers
         }
 
         // GET: Users/Edit/5
+        [Authorize(Roles = "admin")]
         public IActionResult Edit(int id)
         {
             UserModel user = _userService.Query().SingleOrDefault(u => u.Id == id); // getting the model from the service
@@ -167,6 +185,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public IActionResult Edit(UserModel user)
         {
             if (ModelState.IsValid) // if no validation errors through data annotations of the model
@@ -186,6 +205,7 @@ namespace MVC.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize(Roles = "admin")]
         public IActionResult Delete(int id)
         {
             UserModel user = _userService.Query().SingleOrDefault(u => u.Id == id); // getting the model from the service
@@ -200,6 +220,7 @@ namespace MVC.Controllers
 		// ActionName attribute (Delete) renames and overrides the action method name (DeleteConfirmed) 
 		// for the route so that it can be requested as not Users/DeleteConfirmed but as Users/Delete. 
 		[HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             var result = _userService.DeleteUser(id);

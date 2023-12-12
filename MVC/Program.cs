@@ -145,6 +145,12 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+// custom conventional routes can be added before the default route so that here for example instead of calling "Users/Create" route,
+// "Register" route can be called when necessary
+app.MapControllerRoute(name: "register",
+    pattern: "register",
+    defaults: new { controller = "Users", action = "Create" });
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

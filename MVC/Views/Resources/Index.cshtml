@@ -13,9 +13,12 @@
 	<p class="bg-warning text-dark">@TempData["Message"]</p>
 }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.Identity.IsAuthenticated) // show link to only logged in application users
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
 <p class="bg-info text-black">@Model.Count() resource(s) found.</p>
 
@@ -52,10 +55,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.UserCountOutput)
                     </td>
-					<td>
-						<a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
-						<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
-						<a href="#" onclick="deleteResource(@item.Id);">Delete</a>
+					<td class="text-end">
+
+                        @if (User.Identity.IsAuthenticated) // show links to only logged in application users
+                        {
+						    <a asp-action="Details" asp-route-id="@item.Id">Details</a>@:&nbsp;|&nbsp;
+						    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>@:&nbsp;|&nbsp;
+						    <a href="#" onclick="deleteResource(@item.Id);">Delete</a>
+                        }
+
 					</td>
 				</tr>
 		}

@@ -2,6 +2,7 @@
 using Business;
 using Business.Models;
 using Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
+    [Authorize] // only logged in application users with authentication cookie can call the controller's actions
     public class ResourcesController : Controller
     {
         private readonly IResourceService _resourceService;
@@ -20,7 +22,9 @@ namespace MVC.Controllers
 			_userService = userService;
 		}
 
-		// GET: Resources
+        // GET: Resources
+        [AllowAnonymous] // if Authorize is used for the controller but an action is wanted to be called
+                         // by all application users even without authentication cookie, AllowAnonymous is used
 		public IActionResult Index()
         {
             // Way 1:

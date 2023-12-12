@@ -39,15 +39,19 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="GetList">User List</a>
-                        </li>
 
-			@* 
-			    application user's role name can be checked by the User object's IsInRole method,
-			    this method also checks whether the application user is authenticated or not,
-			    display "Role List" link for only application users with role "admin"
-			*@
+                        @if (User.Identity.IsAuthenticated) // show link to only logged in users with authentication cookie
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="GetList">User List</a>
+                            </li>
+                        }
+
+			            @* 
+			                application user's role name can be checked by the User object's IsInRole method,
+			                this method also checks whether the application user is authenticated or not,
+			                display "Role List" link for only application users with role "admin"
+			            *@
                         @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
@@ -55,6 +59,7 @@
                             </li>
                         }
 
+                        @* show link to everyone *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Resources" asp-action="Index">Resource List</a>
                         </li>
@@ -63,16 +68,29 @@
                     <div class="navbar-text">
                         <ul class="navbar-nav me-auto">
 			
-			     @* 
-        			application user's authentication cookie can be checked by the User object's Identity property reference's 
-    				IsAuthenticated boolean property,
-				application user's user name in the authentication cookie can be used by User object's Identity property
-	    			reference's Name string property
-    			    *@
+			                 @* 
+        			            application user's authentication cookie can be checked by the User object's Identity property reference's 
+    				            IsAuthenticated boolean property,
+				                application user's user name in the authentication cookie can be used by User object's Identity property
+	    			            reference's Name string property
+    			            *@
                             @if (!User.Identity.IsAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+
+                                    @* Way 1: *@
+                                    @* <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a> *@
+                                    @* Way 2: since we changed the route of Login action in Users controller, we can also use the controller and action values below *@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+
+                                </li>
+                                <li class="nav-item">
+
+                                    @* Way 1: *@
+                                    @* <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Create">Register</a> *@
+                                    @* Way 2: we can call the custom conventional route that we defined in the Program.cs for easy access such as https://exampledomain.com/register *@
+                                    <a class="nav-link text-dark" asp-area="" asp-route="Register">Register</a>
+
                                 </li>
                             }
                             else
@@ -81,14 +99,19 @@
                                     <span class="badge bg-info text-black">@User.Identity.Name</span>
                                 </li>
 				
-				@* writing (escaping) text in Razor C# code: *@
+				                @* writing (escaping) text in Razor C# code: *@
                                 @* Way 1: *@
                                 @* <text>&nbsp;&nbsp;</text> *@
                                 @* Way 2: *@
                                 @:&nbsp;&nbsp;
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+
+                                    @* Way 1: *@
+                                    @* <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a> *@
+                                    @* Way 2: since we changed the route of Logout action in Users controller, we can also use the controller and action values below *@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+
                                 </li>
                             }
                         </ul>
@@ -97,14 +120,14 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody() @* views that we create are rendered here *@
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container text-center">
             
             &copy; @DateTime.Now.Year - RMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             @* DateTime.Now returns the date and time when it is executed, Year returns the year part *@

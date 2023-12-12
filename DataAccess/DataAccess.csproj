@@ -11,10 +11,6 @@
     <EmbeddedResource Remove="Entities\Contexts\**" />
     <None Remove="Entities\Contexts\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MySql.EntityFrameworkCore" Version="7.0.5+MySQL8.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">

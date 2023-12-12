@@ -28,14 +28,17 @@
 
 <h1>@title</h1> @* The string value set above will be written in the h1 tag. *@
 
-<p>
-    @* HTML: *@
-    @* <a href="/Users/Create">Create New</a> *@
-    @* Tag Helper Way 1: *@
-    @* <a asp-action="Create" asp-controller="Users">Create New</a> *@
-    @* Tag Helper Way 2: no need to write controller because we are under the Views/Users folder with the Create view. *@
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("admin"))
+{
+    <p>
+        @* HTML: *@
+        @* <a href="/Users/Create">Create New</a> *@
+        @* Tag Helper Way 1: *@
+        @* <a asp-action="Create" asp-controller="Users">Create New</a> *@
+        @* Tag Helper Way 2: no need to write controller because we are under the Views/Users folder with the Create view. *@
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
 @* if there is a redirection in an action, the data should be carried with TempData to the redirected action's view *@
 @if (TempData["Message"] is not null)
@@ -89,23 +92,27 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.RoleNameOutput) @* property for formatted or extra data in the service *@
 					</td>
-					<td>
-                        @* HTML Way 1: query string *@
-                        @* <a href="/Users/Details?id=@item.Id">Details</a> *@
-                        @* Example: <a href="/Users/Details?id=13">Details</a> *@
-                        @* HTML Way 2: route value *@
-                        @* <a href="/Users/Details/@item.Id">Details</a> *@
-                        @* Example: <a href="/Users/Details/13">Details</a> *@
-                        @* HTML Helper: the last parameter of the helper method is the route value which must be the same as action's parameter name (id) *@
-						@* @Html.ActionLink("Details", "Details", new { id = item.Id }) *@
-                        @* Tag Helper Way 1: asp-route-id is the route value which must be the same as action's parameter name (id) *@
-                        @* <a asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp; *@
-                        @* Tag Helper Way 2: no need to write the controller *@
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
-						
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
-						<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-					</td>
+					<td class="text-end">
+                        @if (User.IsInRole("admin"))
+                        {
+                            @* HTML Way 1: query string *@
+                            @* <a href="/Users/Details?id=@item.Id">Details</a> *@
+                            @* Example: <a href="/Users/Details?id=13">Details</a> *@
+                            @* HTML Way 2: route value *@
+                            @* <a href="/Users/Details/@item.Id">Details</a> *@
+                            @* Example: <a href="/Users/Details/13">Details</a> *@
+                            @* HTML Helper: the last parameter of the helper method is the route value which must be the same as action's parameter name (id) *@
+						    @* @Html.ActionLink("Details", "Details", new { id = item.Id }) *@
+                            @* Tag Helper Way 1: asp-route-id is the route value which must be the same as action's parameter name (id) *@
+                            @* <a asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp; *@
+                            @* Tag Helper Way 2: no need to write the controller *@
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            @:&nbsp;| &nbsp;
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            @:&nbsp;|&nbsp;
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
 				</tr>
 		}
     </tbody>

@@ -72,7 +72,8 @@ public class UserService : IUserService // UserService is a IUserService (UserSe
 
                 // modified model - entity property assignments for displaying in views
                 IsActiveOutput = e.IsActive ? "Yes" : "No",
-                RoleNameOutput = e.Role.Name
+                RoleNameOutput = e.Role.Name,
+                PasswordOutput = new string('*', e.Password.Length) // hidden password value
             });
     }
 

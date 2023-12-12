@@ -223,3 +223,6 @@ authentication cookie exists or not. It can be used for role checking such as "[
 through the authentication cookie. "User.Identity.IsAuthenticated" checks whether the authentication cookie
 exists or not, "User.Identity.Name" returns the authenticated user's user name and "User.IsInRole(roleName)" 
 method checks whether the authenticated user has the specified role name sent as parameter.
+
+7.15) Custom conventional routes can be defined in Program.cs of the MVC layer to simplify calling controller actions
+and improve SEO such as instead of calling https://exampledomain.com/users/create we can call https://exampledomain.com/register.

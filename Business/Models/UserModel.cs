@@ -59,5 +59,9 @@ public class UserModel
 
     [DisplayName("Role")]
     public string RoleNameOutput { get; set; }
+
+    // for hiding password value from the user
+    [DisplayName("Password")]
+    public string PasswordOutput { get; set; }
     #endregion
 }
