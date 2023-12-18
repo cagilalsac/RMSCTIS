@@ -42,6 +42,11 @@
 
                         @if (User.Identity.IsAuthenticated) // show link to only logged in users with authentication cookie
                         {
+                            @* session example: *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Favorites" asp-action="Index">Favorite Resources</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="GetList">User List</a>
                             </li>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FavoriteModel>
+@*Generated from Custom Template.*@
+@*Model namespace using directive should be added to _ViewImports.cshtml.*@
+
+@{
+    ViewData["Title"] = User.Identity.Name + "'s Favorite Resources";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+    <p>
+        <a asp-action="Clear">Clear All Favorites</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ResourceTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ResourceScoreOutput)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResourceTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResourceScoreOutput)
+                    </td>
+                    <td>
+                        @* for removing the selected favorite from the session by resource id *@
+                        @Html.ActionLink("Remove from Favorites", "Remove", new { resourceId = item.ResourceId })
+                    </td>
+                </tr>
+            }
+
+            @* we can get the average resource score as below: *@
+            <tr>
+                <td>
+                    <b>Average Resource Score:</b>
+                </td>
+                <td colspan="2">
+                    @Model.Average(r => r.ResourceScore).ToString("N1")
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="bg-info text-black">No favorite resources found.</p>
+}

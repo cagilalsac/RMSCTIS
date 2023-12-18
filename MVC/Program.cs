@@ -113,6 +113,15 @@ builder.Services
     });
 #endregion
 
+#region Session
+builder.Services.AddSession(config => // we add session to the services through the config action delegate
+{
+    config.IdleTimeout = TimeSpan.FromMinutes(30); // the session data will be kept during this value as long as the application user interacts,
+                                                   // default is 20 minutes
+    config.IOTimeout = Timeout.InfiniteTimeSpan; // we set this value for using the only time out value of IdleTimeout
+});
+#endregion
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -144,6 +153,10 @@ app.UseAuthentication();
 #endregion
 
 app.UseAuthorization();
+
+#region Session
+app.UseSession();
+#endregion
 
 // custom conventional routes can be added before the default route so that here for example instead of calling "Users/Create" route,
 // "Register" route can be called when necessary

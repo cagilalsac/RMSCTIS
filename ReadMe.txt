@@ -226,3 +226,11 @@ method checks whether the authenticated user has the specified role name sent as
 
 7.15) Custom conventional routes can be defined in Program.cs of the MVC layer to simplify calling controller actions
 and improve SEO such as instead of calling https://exampledomain.com/users/create we can call https://exampledomain.com/register.
+
+7.16) For session usage, in the Program.cs of the MVC layer, Session regions must be added. Session lets keeping data in the 
+server memory for different clients temporarily. In ASP.NET Core MVC, session data can only be managed in string, int or byte[] types.
+First we add a new model (FavoriteModel) in the Business layer to manage the session data. 
+Then we create a controller (FavoritesController) in the MVC layer to get the session data by converting data 
+in JSON format to C# List (deserialize), and to set new data to session by converting data in C# List with newly added item 
+to JSON format (serialize). We also create the actions for listing (including view) and removing session data in this controller then finally 
+we add a "Favorite Resources" link in the _Layout view to let application user list and manage session data.
