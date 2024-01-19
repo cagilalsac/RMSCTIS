@@ -1,6 +1,6 @@
 ﻿#nullable disable
 
-namespace Business.Results.Bases
+namespace DataAccess.Results.Bases
 {
 	public abstract class Result
 	{

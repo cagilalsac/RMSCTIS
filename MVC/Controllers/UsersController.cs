@@ -1,7 +1,7 @@
 #nullable disable
 using Business;
 using Business.Models;
-using Business.Results.Bases;
+using DataAccess.Results.Bases;
 using Business.Services;
 using DataAccess.Enums;
 using Microsoft.AspNetCore.Authentication;

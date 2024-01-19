@@ -1,8 +1,8 @@
-﻿using Business.Results.Bases;
+﻿using DataAccess.Results.Bases;
 
-namespace Business.Results
+namespace DataAccess.Results
 {
-	public class ErrorResult : Result
+    public class ErrorResult : Result
 	{
 		// Example: Result result = new ErrorResult("Operation failed.");
 		public ErrorResult(string message) : base(false, message)

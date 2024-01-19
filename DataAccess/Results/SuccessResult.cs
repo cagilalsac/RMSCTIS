@@ -1,8 +1,8 @@
-﻿using Business.Results.Bases;
+﻿using DataAccess.Results.Bases;
 
-namespace Business.Results
+namespace DataAccess.Results
 {
-	public class SuccessResult : Result
+    public class SuccessResult : Result
 	{
 		// Example: Result result = new SuccessResult("Operation successful.");
 		public SuccessResult(string message) : base(true, message)

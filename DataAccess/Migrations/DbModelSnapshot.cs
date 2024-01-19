@@ -103,15 +103,23 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Entities.UserResource", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "ResourceId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ResourceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserResources");
                 });

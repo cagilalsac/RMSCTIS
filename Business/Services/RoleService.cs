@@ -1,6 +1,6 @@
 ﻿using Business.Models;
-using Business.Results;
-using Business.Results.Bases;
+using DataAccess.Results;
+using DataAccess.Results.Bases;
 using DataAccess.Contexts;
 using DataAccess.Entities;
 using Microsoft.Data.SqlClient;

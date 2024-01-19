@@ -67,12 +67,14 @@ namespace DataAccess.Migrations
                 name: "UserResources",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ResourceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserResources", x => new { x.UserId, x.ResourceId });
+                    table.PrimaryKey("PK_UserResources", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserResources_Resources_ResourceId",
                         column: x => x.ResourceId,
@@ -91,6 +93,11 @@ namespace DataAccess.Migrations
                 name: "IX_UserResources_ResourceId",
                 table: "UserResources",
                 column: "ResourceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserResources_UserId",
+                table: "UserResources",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
