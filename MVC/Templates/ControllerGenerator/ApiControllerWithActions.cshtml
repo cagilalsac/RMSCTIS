@@ -13,36 +13,43 @@ namespace @Model.NamespaceName
     [ApiController]
     public class @Model.ClassName : ControllerBase
     {
+        // TODO: Add service injections here
+
         // GET: api/@modelName
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            // TODO: Add get collection service logic here
             return new string[] { "value1", "value2" };
         }
 
         // GET: api/@modelName/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            // TODO: Add get item service logic here
+            return "value1";
         }
 
         // POST: api/@modelName
         [HttpPost]
         public void Post([FromBody] string value)
         {
+            // TODO: Add insert service logic here
         }
 
         // PUT: api/@modelName/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+            // TODO: Add update service logic here
         }
 
         // DELETE: api/@modelName/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            // TODO: Add delete service logic here
         }
     }
 }

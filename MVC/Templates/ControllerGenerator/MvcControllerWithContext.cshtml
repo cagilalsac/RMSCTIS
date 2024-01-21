@@ -93,7 +93,7 @@ namespace @Model.ControllerNamespace
         // GET: @routePrefix
         public IActionResult Index()
         {
-            @listLine // TODO: Add get list service logic here
+            @listLine // TODO: Add get collection service logic here
             @viewLine
         }
 
@@ -111,7 +111,7 @@ namespace @Model.ControllerNamespace
         // GET: @routePrefix/Create
         public IActionResult Create()
         {
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary
 @{
     foreach (var property in relatedProperties.Values)
     {
@@ -137,7 +137,7 @@ namespace @Model.ControllerNamespace
                 @:// TODO: Add insert service logic here
 }                return RedirectToAction(nameof(Index));
             }
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary
 @{
     foreach (var property in relatedProperties.Values)
     {
@@ -155,7 +155,7 @@ namespace @Model.ControllerNamespace
             {
                 return NotFound();
             }
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary
 @{
     foreach (var property in relatedProperties.Values)
     {
@@ -179,7 +179,7 @@ namespace @Model.ControllerNamespace
 }
                 return RedirectToAction(nameof(Index));
             }
-            // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            // TODO: Add get related items service logic here to set ViewData if necessary
 @{
     foreach (var property in relatedProperties.Values)
     {

@@ -11,85 +11,77 @@ namespace @Model.NamespaceName
 {
     public class @Model.ClassName : Controller
     {
+        // TODO: Add service injections here
+
         // GET: @modelName
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // TODO: Add get collection service logic here
             return View();
         }
 
         // GET: @modelName/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
+            // TODO: Add get item service logic here
             return View();
         }
 
         // GET: @modelName/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // TODO: Add get related items service logic here to set ViewData if necessary
             return View();
         }
 
         // POST: @modelName/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(IFormCollection collection)
         {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            // TODO: Add insert service logic here
+            return RedirectToAction(nameof(Index));
+            
+            // TODO: Add get related items service logic here to set ViewData if necessary
+            return View();
         }
 
         // GET: @modelName/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            // TODO: Add get item service logic here
+
+            // TODO: Add get related items service logic here to set ViewData if necessary
             return View();
         }
 
         // POST: @modelName/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, IFormCollection collection)
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            // TODO: Add update service logic here
+            return RedirectToAction(nameof(Index));
+            
+            // TODO: Add get related items service logic here to set ViewData if necessary
+            return View();
         }
 
         // GET: @modelName/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            // TODO: Add get item service logic here
             return View();
         }
 
         // POST: @modelName/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            // TODO: Add delete service logic here
+            return RedirectToAction(nameof(Index));
         }
     }
 }

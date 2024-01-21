@@ -35,14 +35,14 @@ namespace @Model.ControllerNamespace
     var serviceInterfaceName = Model.ModelVariable + "Service";
     var constructorLine = "public " + Model.ControllerName + "(" + serviceInterfaceType + " " + serviceInterfaceName + ")";
     var modelType = Model.ModelTypeName + "Model";
-    var listLine = "List<" + modelType + "> " + Model.ModelVariable + "List = null;";
+    var listLine = "List<" + modelType + "> " + Model.ModelVariable + "List = new List<" + modelType + ">();";
     var okLine = "return Ok(" + Model.ModelVariable + "List);";
 }
     [Route("api/[controller]")]
     [ApiController]
     public class @Model.ControllerName : ControllerBase
     {
-        // Add service injections here
+        // TODO: Add service injections here
         private readonly @serviceInterfaceType @("_" + serviceInterfaceName);
 
         @constructorLine
@@ -54,7 +54,7 @@ namespace @Model.ControllerNamespace
         [HttpGet]
         public IActionResult Get()
         {
-            @listLine // TODO: Add get list service logic here
+            @listLine // TODO: Add get collection service logic here
             @okLine
         }
 
@@ -75,8 +75,13 @@ namespace @Model.ControllerNamespace
         [HttpPost]
         public IActionResult Post(@modelType @Model.ModelVariable)
         {
-            // TODO: Add insert service logic here
-			return CreatedAtAction("Get", new { id = @(Model.ModelVariable).@primaryKeyName }, @Model.ModelVariable);
+            if (ModelState.IsValid)
+            {
+                // TODO: Add insert service logic here
+
+			    return CreatedAtAction("Get", new { id = @(Model.ModelVariable).@primaryKeyName }, @Model.ModelVariable);
+            }
+            return BadRequest(ModelState);
         }
 
         // PUT: @routePrefix
@@ -84,8 +89,14 @@ namespace @Model.ControllerNamespace
         [HttpPut]
         public IActionResult Put(@modelType @Model.ModelVariable)
         {
-            // TODO: Add update service logic here
-            return NoContent();
+            if (ModelState.IsValid)
+            {
+                // TODO: Add update service logic here
+
+                //return NoContent();
+                return Ok(@Model.ModelVariable);
+            }
+            return BadRequest(ModelState);
         }
 
         // DELETE: @routePrefix/5
@@ -93,6 +104,7 @@ namespace @Model.ControllerNamespace
         public IActionResult Delete(@primaryKeyShortTypeName id)
         {
             // TODO: Add delete service logic here
+
             return NoContent();
         }
 	}
