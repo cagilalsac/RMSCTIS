@@ -1,4 +1,4 @@
-Visual Studio Code Extensions, .NET 7 SDK and MySQL:
+Visual Studio Code Extensions, .NET 8 SDK and MySQL:
 Here's the list of extensions required for Visual Studio Code:
 
 1) C#
@@ -9,9 +9,9 @@ Here's the list of extensions required for Visual Studio Code:
 
 
 
-You also need to install .NET 7 SDK which can be downloaded from the link below:
+You also need to install .NET 8 SDK which can be downloaded from the link below:
 
-https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.401-windows-x64-installer
+https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 
 
 
@@ -28,7 +28,7 @@ I) MVC (ASP.NET Core Web App Model-View-Controller)
 by giving the solution name ResourceManagementSystem and project name MVC,
 if Visual Studio is used Place solution and project in the same directory
 option should not be checked, and project creation should be completed by 
-selecting .NET 7.0 framework, None Authentication type, checking Configure for HTTPS, 
+selecting .NET 8 framework, None Authentication type, checking Configure for HTTPS, 
 not checking Enable Docker and not checking Do not use top-level statements,
 II) Business (Class Library) and 
 III) DataAccess (Class Library) projects, 
@@ -49,8 +49,8 @@ Roadmap:
 2) In the DataAccess layer, MySql.EntityFrameworkCore, Microsoft.EntityFrameworkCore.Tools
 and Microsoft.EntityFrameworkCore.SqlServer packages are downloaded through NuGet. 
 The .NET version you are using determines which packages with that version number should be 
-downloaded from NuGet. For example, if you are using .NET 7, you should look for packages compatible 
-with .NET 7 and install their latest versions. The version number typically corresponds to the major 
+downloaded from NuGet. For example, if you are using .NET 8, you should look for packages compatible 
+with .NET 8 and install their latest versions. The version number typically corresponds to the major 
 version of .NET, so in this case, you should search for packages starting with version 7.x.x.
 If you are using Visual Studio instead of Visual Studio Code, right mouse click on the project
 in the Solution Explorer and click Manage NuGet Packages. Packages can be installed
