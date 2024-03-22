@@ -4,7 +4,8 @@ using System.ComponentModel;
 
 namespace Business.Models
 {
-    public class FavoriteModel
+    public class FavoriteModel // we don't need to inherit from the Record abstract base class
+                               // since this model is not entity related
     {
         public int ResourceId { get; set; } // the id of the resource added to favorites
         public string UserName { get; set; } // the application user's user name

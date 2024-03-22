@@ -1,15 +1,14 @@
 ﻿#nullable disable
 
+using DataAccess.Records.Bases;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Business.Models
 {
-    public class ResourceModel
+    public class ResourceModel : Record
     {
         #region Properties copied from the related entity
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "{0} is required!")]
         [StringLength(50, ErrorMessage = "{0} must be maximum {1} characters!")]
         public string Title { get; set; }

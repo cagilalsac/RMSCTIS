@@ -6,14 +6,13 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using DataAccess.Enums;
+using DataAccess.Records.Bases;
 
 namespace Business.Models;
 
-public class UserModel
+public class UserModel : Record
 {
     #region Properties copied from the related entity
-    public int Id { get; set; }
-
     [DisplayName("User Name")] // DisplayName data annotation (attribute) for "DisplayNameFor" HTML Helper
 							   // or "label asp-for" Tag Helper in views.
 							   // If no DisplayName is defined, "UserName" will be written, else "User Name"
