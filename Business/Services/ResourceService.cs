@@ -5,6 +5,7 @@ using DataAccess.Contexts;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Business.Services.Bases;
 
 namespace Business.Services
 {
@@ -21,14 +22,24 @@ namespace Business.Services
         ResourceModel GetItem(int id);
 	}
 
-    public class ResourceService : IResourceService
+    public class ResourceService : ServiceBase, IResourceService
     {
-        private readonly Db _db;
+        // Way 1: injecting manually without ServiceBase inheritance
+        //private readonly Db _db;
 
-        public ResourceService(Db db)
+        //public ResourceService(Db db)
+        //{
+        //    _db = db;
+        //}
+
+
+
+        // Way 2: injecting with ServiceBase inheritance
+        public ResourceService(Db db) : base(db)
         {
-            _db = db;
         }
+
+
 
         public IQueryable<ResourceModel> Query()
         {

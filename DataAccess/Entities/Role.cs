@@ -3,12 +3,13 @@
 // Way 1:
 // namespace DataAccess.Entities;
 // Way 2:
+using DataAccess.Records.Bases;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Entities // namespace DataAccess.Entities; can also be written
                               // therefore we don't need to use curly braces
 {
-    public class Role
+    public class Role : Record
     {
         // data member and member method usage example from Java:
         // private int id; // a class variable is called as a field in C#
@@ -25,8 +26,11 @@ namespace DataAccess.Entities // namespace DataAccess.Entities; can also be writ
 
 
 
-        public int Id { get; set; } // this is called a property in C# which contains getters and setters,
-                                    // will be primary key in the related database table
+        // Way 1:
+        //public int Id { get; set; } // this is called a property in C# which contains getters and setters,
+                                      // will be primary key in the related database table
+
+        // Way 2: Id property should be inherited from the Record abstract base class
 
 
 

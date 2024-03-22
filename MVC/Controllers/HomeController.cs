@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVC.Controllers.Bases;
 using MVC.Models;
 using System.Diagnostics;
 
 namespace MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : MvcControllerBase // instead of inheriting from the Controller, we inherit from MvcControllerBase to set the culture
     {
         private readonly ILogger<HomeController> _logger;
 

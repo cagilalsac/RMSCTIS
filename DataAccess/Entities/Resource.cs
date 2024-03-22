@@ -3,15 +3,21 @@
 // such as strings, arrays, classes, interfaces, etc.
 // Should only be used with entity and model classes.
 
+using DataAccess.Records.Bases;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Entities; // namespace is used for grouping the classes according the their similar purposes,
                                // similar to package usage in Java
 
-public class Resource
+public class Resource : Record
 {
+    // Way 1:
     // integer number data types: int, long, short, byte
-    public int Id { get; set; } // value assignment required
+    //public int Id { get; set; } // value assignment required
+
+    // Way 2: Id property should be inherited from the Record abstract base class
+
+
 
     // data annotations can be used both in entities and models
     [Required] // can't be null

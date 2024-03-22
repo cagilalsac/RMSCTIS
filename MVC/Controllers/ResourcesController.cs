@@ -5,13 +5,14 @@ using Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC.Controllers.Bases;
 
 
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
     [Authorize] // only logged in application users with authentication cookie can call the controller's actions
-    public class ResourcesController : Controller
+    public class ResourcesController : MvcControllerBase // instead of inheriting from the Controller, we inherit from MvcControllerBase to set the culture
     {
         private readonly IResourceService _resourceService;
         private readonly IUserService _userService;

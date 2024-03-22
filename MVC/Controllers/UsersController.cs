@@ -10,11 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using MVC.Controllers.Bases;
 
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : MvcControllerBase // instead of inheriting from the Controller, we inherit from MvcControllerBase to set the culture
     {
         // Add service injections here
         #region User and Role Service Constructor Injections

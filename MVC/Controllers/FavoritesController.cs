@@ -4,12 +4,13 @@ using Business.Models;
 using Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Controllers.Bases;
 using Newtonsoft.Json;
 
 namespace MVC.Controllers
 {
     [Authorize]
-    public class FavoritesController : Controller
+    public class FavoritesController : MvcControllerBase // instead of inheriting from the Controller, we inherit from MvcControllerBase to set the culture
     {
         const string SESSIONKEY = "favoriteskey"; // the key value to reach the related session data
 

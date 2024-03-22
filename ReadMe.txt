@@ -44,7 +44,7 @@ selecting Add Project Reference:
 
 Roadmap:
 
-1) In the DataAccess layer, entities are created.
+1) In the DataAccess layer, entities are created by inheriting from the Record abstract base class.
 
 2) In the DataAccess layer, MySql.EntityFrameworkCore, Microsoft.EntityFrameworkCore.Tools
 and Microsoft.EntityFrameworkCore.SqlServer packages are downloaded through NuGet. 
@@ -113,7 +113,9 @@ services will be in the same file but generally a Bases folder is created under 
 abstract classes or interfaces are created in the Base folder and concrete classes which inherit the abstract
 classes or implement the interfaces are created in the Services folder.
 Services are used for conversion of database table raw data from entities to the models and like versa 
-which will be used for user interaction in the MVC project.
+which will be used for user interaction in the MVC project. Creating an abstract service base class
+(ServiceBase) and inheriting all of the service classes from this class is a good way for managing the DbContext
+object injection.
 
 The data flow from the user to the database or from database to the user can be shown as below:
 View <-> Controller (Action) <-> Service (Model) <-> DbContext (Entity) <-> Database
@@ -124,7 +126,8 @@ into the IoC Container.
 7.3) In the Business layer, Models folder is created and under this folder models for entities are created
 firstly by copying the primitive type properties (not reference type) to the model class 
 (or this can be defined as copying the properties which have columns in the entity related table from 
-entity class to the model class).
+entity class to the model class). Model classes are also inherited from the Record abstract base class
+like entity classes.
 
 7.4) If the view that the model will be used requires formatted or extra data, new properties
 should be added to the model class and set in the related service's methods.
@@ -170,6 +173,31 @@ Instead of HTML, HTML Helpers or Tag Helpers should be used.
 For example, another request to the Users controller's Details action can be sent by writing
 https://localhost:7275/Users/Details/6 in the address of a browser or creating a link in a view using the 
 HTML anchor tag such that <a href="/Users/Details/6">Details</a>.
+Some HTML Helpers Commonly Used in ASP.NET Core MVC:
+Html.TextBox
+Html.TextBoxFor
+Html.Password
+Html.PasswordFor
+Html.TextArea
+Html.TextAreaFor
+Html.CheckBox
+Html.CheckBoxFor
+Html.RadioButton
+Html.RadioButtonFor
+Html.DropDownList
+Html.DropDownListFor
+Html.ListBox
+Html.ListBoxFor
+Html.Hidden
+Html.HiddenFor
+Html.Editor
+Html.EditorFor
+Html.Display
+Html.DisplayFor
+Html.Label
+Html.LabelFor
+Html.ActionLink
+Html.BeginForm (can be generally invoked with using, or without using and Html.EndForm)
 
 7.7) By scaffolding defaults, the Create, Edit and Delete actions have two overloaded methods.
 For example, for create and edit operations the first action is the get action which returns the view containing
@@ -205,7 +233,9 @@ this parameter should be sent as false.
 
 7.11) MVC Web Application's default culture (for example English or Turkish) configuration can be made in the 
 Localization regions in the MVC project's Program.cs file. If implemented, we won't need to use an instance of 
-CultureInfo when formatting decimal or date time values to string anymore.
+CultureInfo when formatting decimal or date time values to string anymore. However, it is a better way
+to create a base controller (MvcControllerBase) and inherit each controller from this. Therefore, application 
+can gain multi-language support by using session or a cookie in the base controller's constructor.
 
 7.12) In general, cookie authentication is used in MVC Web Applications by creating a list of user claims,
 which include non-critical user data such as user name for displaying and user role for authorization,

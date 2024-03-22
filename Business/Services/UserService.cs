@@ -4,6 +4,7 @@ using DataAccess.Results.Bases;
 using DataAccess.Contexts;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using Business.Services.Bases;
 
 namespace Business;
 
@@ -29,19 +30,30 @@ public interface IUserService
 	Result DeleteUser(int id);
 }
 
-public class UserService : IUserService // UserService is a IUserService (UserService implements IUserService)
+public class UserService : ServiceBase, IUserService // UserService is a IUserService (UserService implements IUserService)
 {
     #region Db Constructor Injection
-    private readonly Db _db;
+    // Way 1: injecting manually without ServiceBase inheritance
+    //private readonly Db _db;
 
-    // An object of type Db which inherits from DbContext class is
-    // injected to this class through the constructor therefore
-    // user CRUD and other operations can be performed with this object.
-    public UserService(Db db)
+    //// An object of type Db which inherits from DbContext class is
+    //// injected to this class through the constructor therefore
+    //// user CRUD and other operations can be performed with this object.
+
+    //public UserService(Db db)
+    //{
+    //    _db = db;
+    //}
+
+
+
+    // Way 2: injecting with ServiceBase inheritance
+    public UserService(Db db) : base(db)
     {
-        _db = db;
     }
     #endregion
+
+
 
     // method implementations of the method definitions in the interface
     public IQueryable<UserModel> Query()

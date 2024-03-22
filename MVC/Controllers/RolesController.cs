@@ -3,14 +3,15 @@ using Business.Models;
 using Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Controllers.Bases;
 
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
-	// all of the controller actions can be executed for only logged in application users, 
-	// who have an authentication cookie, with role name "admin"
+    // all of the controller actions can be executed for only logged in application users, 
+    // who have an authentication cookie, with role name "admin"
     [Authorize(Roles = "admin")]
-    public class RolesController : Controller
+    public class RolesController : MvcControllerBase // instead of inheriting from the Controller, we inherit from MvcControllerBase to set the culture
     {
         // Add service injections here
         private readonly IRoleService _roleService;

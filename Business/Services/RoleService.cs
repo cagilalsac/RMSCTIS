@@ -5,6 +5,7 @@ using DataAccess.Contexts;
 using DataAccess.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Business.Services.Bases;
 
 namespace Business.Services
 {
@@ -16,14 +17,24 @@ namespace Business.Services
         Result Delete(int id);
     }
 
-	public class RoleService : IRoleService
+	public class RoleService : ServiceBase, IRoleService
 	{
-		private readonly Db _db;
+        // Way 1: injecting manually without ServiceBase inheritance
+        //private readonly Db _db;
 
-		public RoleService(Db db)
-		{
-			_db = db;
-		}
+        //public RoleService(Db db)
+        //{
+        //	_db = db;
+        //}
+
+
+
+        // Way 2: injecting with ServiceBase inheritance
+        public RoleService(Db db) : base(db)
+        {
+        }
+
+
 
         public IQueryable<RoleModel> Query()
         {

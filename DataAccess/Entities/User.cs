@@ -1,14 +1,20 @@
 ﻿#nullable disable
 
 using DataAccess.Enums;
+using DataAccess.Records.Bases;
 using System.ComponentModel.DataAnnotations; // since Statuses enum is under different folder therefore different namespace,
                                              // we need to include the namespace with using (similar to import in Java)
 
 namespace DataAccess.Entities;
 
-public class User
+public class User : Record
 {
-    public int Id { get; set; }
+    // Way 1:
+    //public int Id { get; set; }
+
+    // Way 2: Id property should be inherited from the Record abstract base class
+
+
 
     [Required]
     [StringLength(10)]

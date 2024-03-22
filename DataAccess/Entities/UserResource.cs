@@ -1,12 +1,17 @@
 ﻿#nullable disable
 
+using DataAccess.Records.Bases;
+
 namespace DataAccess.Entities;
 
-public class UserResource // many to many tables relationship relational entity
+public class UserResource : Record // many to many tables relationship relational entity
 {
-    public int Id { get; set; }
+    // Way 1:
+    //public int Id { get; set; }
 
-    
+    // Way 2: Id property should be inherited from the Record abstract base class
+
+
 
     // Tables many to many relationship.
     public int UserId { get; set; }

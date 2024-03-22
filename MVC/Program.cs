@@ -9,19 +9,20 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#region Localization
-List<CultureInfo> cultures = new List<CultureInfo>()
-{
-    new CultureInfo("en-US") // for Turkish, "tr-TR" constructor parameter must be used,
-                             // this will be our default culture for our MVC Web Application
-};
+#region Localization 
+// Way 1: Managing localization in the MvcControllerBase is a better way
+//List<CultureInfo> cultures = new List<CultureInfo>()
+//{
+//    new CultureInfo("en-US") // for Turkish, "tr-TR" constructor parameter must be used,
+//                             // this will be our default culture for our MVC Web Application
+//};
 
-builder.Services.Configure<RequestLocalizationOptions>(options =>
-{
-    options.DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault().Name);
-    options.SupportedCultures = cultures;
-    options.SupportedUICultures = cultures;
-});
+//builder.Services.Configure<RequestLocalizationOptions>(options =>
+//{
+//    options.DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault().Name);
+//    options.SupportedCultures = cultures;
+//    options.SupportedUICultures = cultures;
+//});
 #endregion
 
 #region AppSettings
@@ -127,12 +128,13 @@ builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 #region Localization
-app.UseRequestLocalization(new RequestLocalizationOptions()
-{
-    DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault().Name),
-    SupportedCultures = cultures,
-    SupportedUICultures = cultures
-});
+// Way 1: Managing localization in the MvcControllerBase is a better way
+//app.UseRequestLocalization(new RequestLocalizationOptions()
+//{
+//    DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault().Name),
+//    SupportedCultures = cultures,
+//    SupportedUICultures = cultures
+//});
 #endregion
 
 // Configure the HTTP request pipeline.
