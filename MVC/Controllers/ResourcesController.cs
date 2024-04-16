@@ -48,9 +48,9 @@ namespace MVC.Controllers
             if (resource == null)
             {
                 // instead of returning 404 Not Found HTTP Status Code,
-                // we send the message as model to the _Error partial view
+                // we send the message as model to the Error view
                 // which is created under ~/Views/Shared folder
-                return View("_Error", "Resource not found!");
+                return View("Error", "Resource not found!");
             }
             return View(resource);
         }
@@ -91,7 +91,7 @@ namespace MVC.Controllers
             ResourceModel resource = _resourceService.GetItem(id);
             if (resource == null)
             {
-                return View("_Error", "Resource not found!");
+                return View("Error", "Resource not found!");
 			}
 			ViewBag.UserId = new MultiSelectList(_userService.Query().ToList(), "Id", "UserName");
 			return View(resource);

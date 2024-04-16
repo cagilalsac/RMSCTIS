@@ -36,7 +36,7 @@ public class UserModel : Record
     public string UserName { get; set; }
 
 	[Required(ErrorMessage = "{0} is required!")]
-	[StringLength(8, MinimumLength = 5, ErrorMessage = "{0} must be minimum {2} maximum {1} characters!")]
+	[StringLength(8, MinimumLength = 3, ErrorMessage = "{0} must be minimum {2} maximum {1} characters!")]
 	public string Password { get; set; }
 
     [DisplayName("Active")]

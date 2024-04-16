@@ -94,8 +94,8 @@ namespace MVC.Controllers
         }
 
         // GET: Users/Create
-        // GET: Register: custom conventional route named register defined in Program.cs
         [HttpGet] // action method which is get by default when not written
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             // Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
@@ -117,31 +117,19 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost] // action method which is used for processing request data sent by a form or AJAX
         [ValidateAntiForgeryToken] // attribute for preventing Cross-Site Request Forgery (CSRF) 
+        [Authorize(Roles = "admin")]
         // Way 1: catching data with parameters through form input elements' name HTML attribute
         //public IActionResult Create(string UserName, string Password, bool IsActive, Statuses Status, int RoleId)
         // Way 2:
         public IActionResult Create(UserModel user) // since UserModel has properties for above parameters, it should be used as action parameter
         {
-            if (!User.Identity.IsAuthenticated || !User.IsInRole("admin")) // setting default user model values for registering new users operation
-            {
-                user.Status = Statuses.Junior;
-                user.IsActive = true;
-                user.RoleId = (int)Roles.User;
-
-                ModelState.Remove(nameof(user.RoleId)); // if required like here, some model properties can be removed from the ModelState validation
-            }
-            // if user is authenticated and user is in admin role, create a new user from the values of all inputs from the Create view
-
             if (ModelState.IsValid) // validates the user action parameter (model) through data annotations above its properties
             {
                 // If model data is valid, insert service logic should be written here.
                 Result result = _userService.Add(user); // result referenced object can be of type SuccessResult or ErrorResult
                 if (result.IsSuccessful)
                 {
-                    if (!User.Identity.IsAuthenticated || !User.IsInRole("admin")) // if register operation is successful, redirect to the "Account/Login" route
-                        return Redirect("Account/Login"); // custom route redirection
-
-                    // if create operation of admin is successful, redirect to the user list
+                    // if create operation is successful, redirect to the user list
                     // Way 1:
                     //return RedirectToAction("GetList");
                     // Way 2:
@@ -149,7 +137,7 @@ namespace MVC.Controllers
                     return RedirectToAction(nameof(GetList)); // redirection to the action specified of this controller to get the updated list from database
                 }
 
-				// Way 1:  carrying data from the action with ViewData
+				// Way 1: carrying data from the action with ViewData
 				//ViewBag.Message = result.Message; // ViewData["Message"] = result.Message;
 				// Way 2: sends data to view's validation summary
 				ModelState.AddModelError("", result.Message); 
@@ -231,83 +219,5 @@ namespace MVC.Controllers
 			 
             return RedirectToAction(nameof(GetList));
         }
-
-
-
-        #region User Authentication
-        // ~/Users/Login // we could invoke this action by calling https://exampledomain.com/Users/Login like other actions above
-        // Way 1: we can change the route so that we can call this action by https://exampledomain.com/Account/Login
-		//[Route("Account/Login")]
-		// Way 2: we can use the action name by writing {action} and controller name by writing {controller}
-        //[Route("Account/{action}")]
-		// Way 3: we can also change the route template in the HttpGet action method
-        [HttpGet("Account/{action}")]
-        public IActionResult Login()
-        {
-            return View(); // returning the Login view to the user for entering the user name and password
-        }
-
-		// Way 1: changing the route by using Route attribute
-        //[Route("Account/{action}")]
-		// Way 2: changing the route by using the HttpPost action method
-        [HttpPost("Account/{action}")] 
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(UserModel user)
-        {
-            // checking the active user from the database table by the user name and password
-            var existingUser = _userService.Query().SingleOrDefault(u => u.UserName == user.UserName && u.Password == user.Password && u.IsActive);
-            if (existingUser is null) // if an active user with the entered user name and password can't be found in the database table
-            {
-                ModelState.AddModelError("", "Invalid user name and password!"); // send the invalid message to the view's validation summary 
-                return View(); // returning the Login view
-            }
-
-            // Creating the claim list that will be hashed in the authentication cookie which will be sent with each request to the web application.
-            // Only non-critical user data, which will be generally used in the web application such as user name to show in the views or user role
-            // to check if the user is authorized to perform specific actions, should be put in the claim list.
-            // Critical data such as password must never be put in the claim list!
-            List<Claim> userClaims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, existingUser.UserName),
-                new Claim(ClaimTypes.Role, existingUser.RoleNameOutput)
-            };
-
-            // creating an identity by the claim list and default cookie authentication
-            var userIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // creating a principal by the identity
-            var userPrincipal = new ClaimsPrincipal(userIdentity);
-
-            // signing the user in to the MVC web application and returning the hashed authentication cookie to the client
-            await HttpContext.SignInAsync(userPrincipal);
-			// Methods ending with "Async" should be used with the "await" (asynchronous wait) operator therefore
-			// the execution of the task run by the asynchronous method can be waited to complete and the
-			// result of the method can be used. If the "await" operator is used in a method, the method definition
-			// must be changed by adding "async" keyword before the return type and the return type must be written 
-			// in "Task". If the method is void, only "Task" should be written.
-            
-            // redirecting user to the home page
-            return RedirectToAction("Index", "Home");
-        }
-
-		// ~/Account/Logout
-        [HttpGet("Account/{action}")]
-        public async Task<IActionResult> Logout()
-        {
-			// signing out the user by removing the authentication cookie from the client
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-			
-			// redirecting user to the home page
-            return RedirectToAction("Index", "Home");
-        }
-
-		// ~/Account/AccessDenied
-        [HttpGet("Account/{action}")]
-        public IActionResult AccessDenied()
-        {
-			// returning the partial view "_Error" by sending the message of type string as model
-            return View("_Error", "You don't have access to this operation!");
-        }
-        #endregion
     }
 }

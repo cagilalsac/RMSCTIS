@@ -52,9 +52,9 @@ namespace Business.Services
                 Title = r.Title,
 
                 //ScoreOutput = r.Score.ToString("N1", new CultureInfo("en-US"))
-                // no need to use CultureInfo anywhere in our project anymore,
-                // since we made the culture info configuration under the
-                // Localization section in MVC project's Program.cs file
+                // CultureInfo should be used when formatting decimal and date time values to string.
+                // No need to use CultureInfo anywhere in our project anymore, since we made the culture info
+                // configuration in the MvcControllerBase class
                 ScoreOutput = r.Score.ToString("N1"), 
                 // N: number format, 1: one decimal after decimal point
 

@@ -2,10 +2,8 @@ using Business;
 using Business.Services;
 using DataAccess.Contexts;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using MVC.Settings;
-using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +28,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Way 1:
 //var section = builder.Configuration.GetSection("AppSettings");
 // Way 2:
-var section = builder.Configuration.GetSection(nameof(MVC.Settings.AppSettings)); // only AppSettings class can also be used by
+var section = builder.Configuration.GetSection(nameof(MVC.Settings.AppSettings)); // AppSettings class can also be used by
                                                                                   // adding "using MVC.Settings;" directive
-section.Bind(new MVC.Settings.AppSettings()); // this method will fill the only one instance of type AppSettings with data in the
+section.Bind(new MVC.Settings.AppSettings()); // this method will fill the only one instance of type AppSettings with data of the
                                               // AppSettings section of the appsettings.json file
 #endregion
 
@@ -93,17 +91,21 @@ builder.Services
 	// action delegates do not return a result and they are generally used for configuration operations as seen here.
 
     {
-        config.LoginPath = "/Account/Login";
-	    // If an operation is attempted without logging into the system, redirect the user to the 
-		// Users controller -> Login action.
+        //config.LoginPath = "/Account/Home/Login";
+        // since we changed the route of Account area's Home controller's Login action, we should set:
+        config.LoginPath = "/Login";
+        // If an operation is attempted without logging into the system, redirect the user to the 
+        // Account area's Home controller's Login action.
 
-        config.AccessDeniedPath = "/Account/AccessDenied";
+        //config.AccessDeniedPath = "/Account/Home/AccessDenied";
+        // since we changed the route of Account area's Home controller's AccessDenied action, we should set:
+        config.AccessDeniedPath = "/AccessDenied";
         // If an unauthorized operation is attempted after logging into the system, redirect the user to the 
-		// Users controller -> AccessDenied action.
+        // Account area's Home controller's AccessDenied action.
 
-		// Way 1:
+        // Way 1:
         //config.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-		// Way 2: getting minute value from appsettings.json
+        // Way 2: getting minute value from appsettings.json
         config.ExpireTimeSpan = TimeSpan.FromMinutes(AppSettings.CookieExpirationInMinutes);
         // Allow the cookie created after logging into the system to be valid for 30 minutes.
 
@@ -160,11 +162,21 @@ app.UseAuthorization();
 app.UseSession();
 #endregion
 
-// custom conventional routes can be added before the default route so that here for example instead of calling "Users/Create" route,
-// "Register" route can be called when necessary
-app.MapControllerRoute(name: "register",
-    pattern: "register",
-    defaults: new { controller = "Users", action = "Create" });
+// custom conventional routes can be added before the default route so that here for example instead of calling "Home/Privacy" route,
+// "About" route can be called when necessary
+app.MapControllerRoute(name: "about",
+    pattern: "about",
+    defaults: new { controller = "Home", action = "Privacy" });
+
+#region Area
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+});
+#endregion
 
 app.MapControllerRoute(
     name: "default",

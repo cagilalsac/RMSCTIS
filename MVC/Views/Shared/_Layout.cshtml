@@ -1,23 +1,9 @@
-﻿@using System.Globalization;
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @{
-        // we want to write RMS CTIS v1.0 in the title of the HTML document:
-        // we can reach the AppSettings class properties directly and use their values 
-        // Way 1:
-        // string versionedTitle = string.Concat(AppSettings.AppTitle, " v", AppSettings.AppVersion.ToString("N1", new CultureInfo("en-US")));
-        // Way 2:
-        // string versionedTitle = AppSettings.AppTitle + " v" + AppSettings.AppVersion.ToString("N1", new CultureInfo("en-US"));
-        // Way 3:
-        string versionedTitle = $"{AppSettings.AppTitle} v{AppSettings.AppVersion.ToString("N1", new CultureInfo("en-US"))}";
-        // N1 is the number format with one decimal, which is formatted according to English culture with "." as decimal point,
-        // CultureInfo should be used when formatting decimal and date time values to string.
-    }
-    <title>@ViewData["Title"] - @versionedTitle</title>@* titles set in the views will be written here by ViewData["Title"] *@
+    <title>@ViewData["Title"] - @AppSettings.AppTitle</title> @* titles set in the views will be written here by ViewData["Title"] *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
@@ -28,9 +14,13 @@
             <div class="container-fluid">
 
                 @* Way 1: HTML Helper *@
-                @* @Html.ActionLink("RMS", "Index", "Home", new { @class = "navbar-brand layoutheader", area = "" }) *@
+                @* @Html.ActionLink("RMS CTIS", "Index", "Home", new { @class = "navbar-brand layoutheader", area = "" }) *@
                 @* Way 2: Tag Helper *@
                 <a class="navbar-brand layoutheader" asp-area="" asp-controller="Home" asp-action="Index">@AppSettings.AppTitle</a>
+                @* 
+                    we want to write RMS CTIS in the title of the HTML document:
+                    we can reach the AppSettings class properties directly and use their values
+                *@
                 @* layoutheader CSS class can be found in wwwroot/css/site.css *@
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -83,25 +73,21 @@
                             {
                                 <li class="nav-item">
 
-                                    @* Way 1: *@
-                                    @* <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a> *@
-                                    @* Way 2: since we changed the route of Login action in Users controller, we can also use the controller and action values below *@
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                    <a class="nav-link text-dark" asp-area="Account" asp-controller="Home" asp-action="Login">Login</a>
+                                    @* will redirect to ~/Login instead of ~/Account/Home/Login *@
 
                                 </li>
                                 <li class="nav-item">
 
-                                    @* Way 1: *@
-                                    @* <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Create">Register</a> *@
-                                    @* Way 2: we can call the custom conventional route that we defined in the Program.cs for easy access such as https://exampledomain.com/register *@
-                                    <a class="nav-link text-dark" asp-area="" asp-route="Register">Register</a>
+                                    <a class="nav-link text-dark" asp-area="Account" asp-controller="Home" asp-action="Register">Register</a>
+                                    @* will redirect to ~/Register instead of ~/Account/Home/Register *@
 
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item pt-2">@* pt-2 Bootstrap class: padding top 2 units *@
-                                    <span class="badge bg-info text-black">@User.Identity.Name</span>
+                                    <span class="badge bg-info text-black">@User.Identity.Name</span>@* displaying the user name *@
                                 </li>
 				
 				                @* writing (escaping) text in Razor C# code: *@
@@ -111,12 +97,7 @@
                                 @:&nbsp;&nbsp;
 
                                 <li class="nav-item">
-
-                                    @* Way 1: *@
-                                    @* <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a> *@
-                                    @* Way 2: since we changed the route of Logout action in Users controller, we can also use the controller and action values below *@
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-
+                                    <a class="nav-link text-dark" asp-area="Account" asp-controller="Home" asp-action="Logout">Logout</a>
                                 </li>
                             }
                         </ul>
@@ -134,8 +115,13 @@
     <footer class="border-top footer text-muted">
         <div class="container text-center">
             
-            &copy; @DateTime.Now.Year - RMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - RMS - 
             @* DateTime.Now returns the date and time when it is executed, Year returns the year part *@
+            
+            @* Way 1: *@
+            @* <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
+            @* Way 2: we can call the custom conventional route that we defined in the Program.cs for easy access such as https://exampledomain.com/about *@
+            <a asp-route="About">Privacy</a>
 
         </div>
     </footer>

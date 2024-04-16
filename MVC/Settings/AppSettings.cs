@@ -16,7 +16,6 @@
         // may effect other users when they are using the application.
 
         public static string AppTitle { get; set; }
-        public static double AppVersion { get; set; }
 		
 		// for managing cookie expiration duration in appsettings.json
         public static int CookieExpirationInMinutes { get; set; }

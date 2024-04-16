@@ -242,7 +242,17 @@ which include non-critical user data such as user name for displaying and user r
 then the data in the claim list is hashed and sent to the client as an authentication cookie.
 For each request, the authentication cookie is also sent to the server and the hashed user data in the cookie
 is used in necessarry controllers, actions and views. In the Program.cs file of the MVC layer, authentication
-configuration should be made as written in the Authentication regions.
+configuration should be made as written in the Authentication regions. It is a good idea to manage operations,
+for example account operations, in seperate modules. Therefore areas are used in MVC to divide the web application 
+project into modules. In order to create an area, right click on the MVC project from the Solution Explorer,
+Add -> New Scaffolded Item, then select MVC Area. Copy and paste the app.UseEndpoints code within the 
+ScaffoldingReadMe.txt file to the Program.cs file before the default route definition. Then in the
+Areas -> Account -> Controllers folder, a new controller can be created. An Area attribute with the "area name"
+must be added above the controller class and this name must be used in the related HTML anchor elements 
+with the asp-area="area name" tag helper. Also the area name must be used as an anonymous type 
+for route values such as new { area = "area name" } in the related actions' RedirectToAction methods.
+Each area should have _ViewImports.cshtml and _ViewStart.cshtml files under the Views folder
+independent from the MVC project's files.
 
 7.13) In controllers, authentication cookie can be checked by the "Authorize" attribute. It can either be written
 above the controller to work for all actions or above specific actions. "Authorize" attribute checks whether the 
@@ -254,8 +264,8 @@ through the authentication cookie. "User.Identity.IsAuthenticated" checks whethe
 exists or not, "User.Identity.Name" returns the authenticated user's user name and "User.IsInRole(roleName)" 
 method checks whether the authenticated user has the specified role name sent as parameter.
 
-7.15) Custom conventional routes can be defined in Program.cs of the MVC layer to simplify calling controller actions
-and improve SEO such as instead of calling https://exampledomain.com/users/create we can call https://exampledomain.com/register.
+7.15) Custom routes can be created for actions in a controller such as in the HomeController in the Account area. 
+Custom conventional routes can also be defined in Program.cs of the MVC layer to simplify calling controller actions and improve SEO.
 
 7.16) For session usage, in the Program.cs of the MVC layer, Session regions must be added. Session lets keeping data in the 
 server memory for different clients temporarily. In ASP.NET Core MVC, session data can only be managed in string, int or byte[] types.
